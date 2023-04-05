@@ -9,5 +9,6 @@ namespace DentalClinicWeb.Data
             : base(options)
         {
         }
+
     }
 }
