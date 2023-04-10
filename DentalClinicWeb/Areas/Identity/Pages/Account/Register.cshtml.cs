@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using DentalClinicWeb.Constans;
 using DentalClinicWeb.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -147,6 +148,9 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
+                    // added admin role to user creation step
+                    await _userManager.AddToRoleAsync(user, Roles.Admin.ToString());
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
