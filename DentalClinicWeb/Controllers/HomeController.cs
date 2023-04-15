@@ -9,7 +9,6 @@ using System.Diagnostics;
 
 namespace DentalClinicWeb.Controllers
 {
-    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -21,6 +20,7 @@ namespace DentalClinicWeb.Controllers
             _userManager = userManager;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
             var user = _userManager.GetUserAsync(User).Result;
@@ -45,5 +45,13 @@ namespace DentalClinicWeb.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult ManageUsers()
+        {
+            ViewData["Title"] = "Manage Users";
+            return View("~/Areas/Identity/Pages/ManageUsers.cshtml");
+        }
+
     }
 }

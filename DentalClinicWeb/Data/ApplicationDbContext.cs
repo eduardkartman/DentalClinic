@@ -30,5 +30,6 @@ public class ApplicationEntityConfiguration : IEntityTypeConfiguration<Applicati
         builder.Property(u => u.Country).HasMaxLength(50);
         builder.Property(u => u.City).HasMaxLength(50);
         builder.Property(u => u.ZipCode).HasMaxLength(10);
+        builder.Property(u => u.Role).HasMaxLength(50);
     }
 }

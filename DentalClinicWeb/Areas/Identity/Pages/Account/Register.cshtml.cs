@@ -18,7 +18,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace DentalClinicWeb.Areas.Identity.Pages.Account
@@ -31,13 +33,15 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -45,6 +49,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
         }
 
         /// <summary>
@@ -118,13 +123,22 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
 
             [Display(Name = "ZIP Code")]
             public string ZipCode { get; set; }
+            [BindProperty]
+            public string Role { get; set; }
+
+            public SelectList RoleList { get; set; }
         }
 
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task OnGetAsync()
         {
-            ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            var roles = await _roleManager.Roles.ToListAsync();
+            Input = new InputModel
+            {
+                RoleList = new SelectList(roles, nameof(IdentityRole.Name), nameof(IdentityRole.Name))
+            };
+                
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -141,6 +155,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
                 user.City = Input.City;
                 user.Country = Input.Country;
                 user.ZipCode = Input.ZipCode;
+                user.Role = Input.Role;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -148,8 +163,9 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    // added admin role to user creation step
-                    await _userManager.AddToRoleAsync(user, Roles.Admin.ToString());
+
+                    
+                    await _userManager.AddToRoleAsync(user, Input.Role);
 
                     _logger.LogInformation("User created a new account with password.");
 
