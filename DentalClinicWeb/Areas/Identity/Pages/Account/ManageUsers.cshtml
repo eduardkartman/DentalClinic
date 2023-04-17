@@ -1,0 +1,47 @@
+﻿@page
+@model ManageUsersModel
+
+<div class="container">
+    <h1>Manage Users</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Email</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Phone Number</th>
+                <th>Country</th>
+                <th>City</th>
+                <th>Role</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td>@user.UserId</td>
+                    <td>@user.Email</td>
+                    <td>@user.FirstName</td>
+                    <td>@user.LastName</td>
+                    <td>@user.PhoneNumber</td>
+                    <td>@user.Country</td>
+                    <td>@user.City</td>
+                    <td>@user.Role</td>
+                    <td>
+                        <form method="post" asp-page-handler="Delete" asp-route-id="@user.UserId">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="get" asp-page="/EditUsers" asp-route-id="@user.UserId">
+                            <button type="submit" class="btn btn-primary">Edit User</button>
+                        </form>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

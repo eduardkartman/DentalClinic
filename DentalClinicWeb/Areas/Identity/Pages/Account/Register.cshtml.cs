@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DentalClinicWeb.Constans;
 using DentalClinicWeb.Data;
+using DentalClinicWeb.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -34,6 +35,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext _context;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -41,7 +43,8 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -50,6 +53,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _roleManager = roleManager;
+            _context = context;
         }
 
         /// <summary>
@@ -141,6 +145,23 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
                 
         }
 
+        private UserViewModel CreateUserViewModel(ApplicationUser user)
+        {
+            return new UserViewModel
+            {
+                UserId = user.Id,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber,
+                City = user.City,
+                Country = user.Country,
+                ZipCode = user.ZipCode,
+                Role = user.Role
+            };
+        }
+
+
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
@@ -157,6 +178,8 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
                 user.ZipCode = Input.ZipCode;
                 user.Role = Input.Role;
 
+
+
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -166,6 +189,10 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
 
                     
                     await _userManager.AddToRoleAsync(user, Input.Role);
+
+                    var userViewModel = CreateUserViewModel(user);
+                    _context.Users.Add(userViewModel);
+                    await _context.SaveChangesAsync();
 
                     _logger.LogInformation("User created a new account with password.");
 

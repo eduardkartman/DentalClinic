@@ -18,9 +18,12 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddDefaultUI();
 
 builder.Services.AddRazorPages();
+
+// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -42,8 +45,15 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllerRoute(
+    name: "EditUsers",
+    pattern: "/EditUsers/{id?}",
+    defaults: new { controller = "Home", action = "EditUsers" });
+
+app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
 app.MapRazorPages();
 
 using (var scope = app.Services.CreateScope())
