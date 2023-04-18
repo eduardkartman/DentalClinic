@@ -35,10 +35,13 @@
                         </form>
                     </td>
                     <td>
-                        <form method="get" asp-page="/EditUsers" asp-route-id="@user.UserId">
+                        <form method="get" asp-area="Identity" asp-page="/Account/EditUsers" asp-route-id="@user.UserId">
                             <button type="submit" class="btn btn-primary">Edit User</button>
                         </form>
+
                     </td>
+
+
 
                 </tr>
             }

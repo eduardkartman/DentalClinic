@@ -1,9 +1,5 @@
 ﻿@page "{id}"
-@model DentalClinicWeb.Areas.Identity.Pages.Account.EditUsersModel
-@{
-    ViewData["Title"] = "Edit User";
-    Layout = "~/Pages/Shared/_Layout.cshtml";
-}
+@model EditUsersModel
 
 <div class="container mt-5">
     <h2>Edit User</h2>
@@ -49,8 +45,8 @@
                 <option value="Patient">Patient</option>
             </select>
         </div>
-
-        <button type="submit" class="btn btn-primary">Update</button>
+        <br/>
+        <button type="submit" class="btn btn-primary" onclick="return confirm('Are you sure you want to update this user?')">Update</button>
         <a asp-page="/ManageUsers" class="btn btn-secondary">Cancel</a>
     </form>
 </div>

@@ -44,10 +44,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "EditUsers",
-    pattern: "/EditUsers/{id?}",
-    defaults: new { controller = "Home", action = "EditUsers" });
+
 
 app.MapControllerRoute(
     name: "default",

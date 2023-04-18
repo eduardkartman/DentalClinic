@@ -31,24 +31,24 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
 
             [Required(ErrorMessage = "The First Name field is required.")]
             [Display(Name = "First Name")]
-            public string FirstName { get; set; }
+            public string? FirstName { get; set; }
 
             [Required(ErrorMessage = "The Last Name field is required.")]
             [Display(Name = "Last Name")]
-            public string LastName { get; set; }
+            public string? LastName { get; set; }
 
             [Required(ErrorMessage = "The Phone Number field is required.")]
             [Display(Name = "Phone Number")]
-            public string PhoneNumber { get; set; }
+            public string? PhoneNumber { get; set; }
 
             [Display(Name = "Country")]
-            public string Country { get; set; }
+            public string? Country { get; set; }
 
             [Display(Name = "City")]
-            public string City { get; set; }
+            public string? City { get; set; }
 
             [Display(Name = "Zip Code")]
-            public string ZipCode { get; set; }
+            public string? ZipCode { get; set; }
 
             [Required(ErrorMessage = "The Role field is required.")]
             [Display(Name = "Role")]
@@ -57,6 +57,8 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
+            string userId = Request.Query["id"];
+
             if (string.IsNullOrEmpty(id))
             {
                 return NotFound();
@@ -79,6 +81,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
                 ZipCode = user.ZipCode,
                 Role = user.Role,
             };
+
             return Page();
         }
         public async Task<IActionResult> OnPostAsync()
@@ -99,9 +102,19 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
                 user.ZipCode = Input.ZipCode;
                 user.Role = Input.Role;
 
+                // Get the user's current roles
+                var currentRoles = await _userManager.GetRolesAsync(user);
+
+                // Remove the user's current roles
+                await _userManager.RemoveFromRolesAsync(user, currentRoles);
+
+                // Add the new role
+                await _userManager.AddToRoleAsync(user, Input.Role);
+
                 await _userManager.UpdateAsync(user);
 
                 var userViewModel = await _context.Users.FindAsync(Input.Id);
+
                 if (userViewModel == null)
                 {
                     return NotFound();
@@ -109,13 +122,16 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
 
                 userViewModel.FirstName = Input.FirstName;
                 userViewModel.LastName = Input.LastName;
+                userViewModel.PhoneNumber = Input.PhoneNumber;
+                userViewModel.Country = Input.Country;
+                userViewModel.City = Input.City;
+                userViewModel.ZipCode = Input.ZipCode;
                 userViewModel.Role = Input.Role;
 
                 await _context.SaveChangesAsync();
 
                 return RedirectToPage("/ManageUsers");
             }
-
             return Page();
         }
 

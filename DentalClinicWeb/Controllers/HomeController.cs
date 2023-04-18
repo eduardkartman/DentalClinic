@@ -35,6 +35,7 @@ namespace DentalClinicWeb.Controllers
             ViewBag.Country = user.Country;
             ViewBag.City = user.City;
             ViewBag.ZipCode = user.ZipCode;
+            ViewBag.Role =user.Role;
 
             return View();
         }
@@ -50,6 +51,12 @@ namespace DentalClinicWeb.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> EditUsers(string id)
+        {
+            // logic for editing user
+            return View();
+        }
 
 
     }

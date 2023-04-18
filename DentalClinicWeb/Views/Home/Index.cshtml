@@ -10,7 +10,7 @@
             <div class="sidebar-sticky">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">
+                        <a class="nav-link active" href="@Url.Action("Index", "Home")">
                             <span data-feather="home"></span>
                             Dashboard <span class="sr-only"></span>
                         </a>
@@ -70,8 +70,12 @@
                 <div class="col-md-6">
                     <h2>Account Details</h2>
                     <div class="form-group">
+                        <label for="inputRole">Role:</label>
+                        <input type="text" class="form-control" id="inputRole" value="@ViewBag.Role" readonly>
+                    </div>
+                    <div class="form-group">
                         <label for="inputName">First Name:</label>
-                        <input type="text" class="form-control" id="inputFirstName" value="@ViewBag.FirstName">
+                        <input type="text" class="form-control" id="inputFirstName" value="@ViewBag.FirstName" readonly>
                     </div>
                     <div class="form-group">
                         <label for="inputName">Last Name:</label>
@@ -97,6 +101,7 @@
                         <label for="inputZipCode">Zip Code:</label>
                         <input type="text" class="form-control" id="inputZipCode" value="@ViewBag.ZipCode" readonly>
                     </div>
+                 
                 </div>
                 <!-- Appointment Summary -->
                 <div class="col-md-6">
