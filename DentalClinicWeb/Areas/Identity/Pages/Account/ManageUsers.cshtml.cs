@@ -41,6 +41,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages
                     PhoneNumber = u.PhoneNumber,
                     Country = u.Country,
                     City = u.City,
+                    ZipCode = u.ZipCode,
                     Role = u.Role
                 })
                 .ToListAsync();
@@ -63,67 +64,34 @@ namespace DentalClinicWeb.Areas.Identity.Pages
                 {
                     // Delete the user from the UserViewModel table
                     _context.Users.Remove(userViewModel);
+
+                    // Check if the user is a patient
+                    var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Id == id);
+                    if (patient != null)
+                    {
+                        // Delete the patient from the Patient table
+                        _context.Patients.Remove(patient);
+                    }
+
+                    // Check if the user is a doctor
+                    var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == id);
+                    if (doctor != null)
+                    {
+                        // Delete the doctor from the Doctor table
+                        _context.Doctors.Remove(doctor);
+                    }
+
                     await _context.SaveChangesAsync();
                 }
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToPage("/Account/ManageUsers", new { area = "Identity" });
+
             }
             else
             {
                 return NotFound();
             }
         }
-
-        public async Task<IActionResult> OnPostEditAsync(int id, string firstName, string lastName, string phoneNumber, string country, string city, string role)
-        {
-            // Find the user by their ID
-            var user = await _userManager.FindByIdAsync(id.ToString());
-
-            // If user not found, return 404 not found
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            // Get the existing user data from the UserViewModel table
-            var userViewModel = await _context.Users.FindAsync(id);
-
-            // Modify the user properties as needed
-            user.FirstName = firstName;
-            user.LastName = lastName;
-            user.PhoneNumber = phoneNumber;
-
-            // Update the user in the AspNetUsers table
-            var result = await _userManager.UpdateAsync(user);
-
-            // If update successful, update the user in the UserViewModel table
-            if (result.Succeeded)
-            {
-                userViewModel.FirstName = firstName;
-                userViewModel.LastName = lastName;
-                userViewModel.PhoneNumber = phoneNumber;
-                userViewModel.Country = country;
-                userViewModel.City = city;
-                userViewModel.Role = role;
-
-                _context.Users.Update(userViewModel);
-                await _context.SaveChangesAsync();
-
-                return RedirectToPage("/ManageUsers");
-            }
-            // If update failed, add error messages to ModelState and return to the edit form
-            else
-            {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-
-                return Page();
-            }
-        }
-
-
 
     }
 }

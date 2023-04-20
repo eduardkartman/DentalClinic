@@ -3,6 +3,7 @@ using DentalClinicWeb.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Numerics;
 using System.Reflection.Emit;
 
 namespace DentalClinicWeb.Data
@@ -10,6 +11,10 @@ namespace DentalClinicWeb.Data
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<UserViewModel> Users { get; set; }
+        public DbSet<PatientViewModel> Patients { get; set; }
+        public DbSet<DoctorViewModel> Doctors { get; set; }
+
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -19,6 +24,7 @@ namespace DentalClinicWeb.Data
         {
             base.OnModelCreating(builder);
             builder.ApplyConfiguration(new ApplicationEntityConfiguration());
+
         }
     }
 }

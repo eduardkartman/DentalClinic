@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
@@ -179,19 +180,54 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
                 user.Role = Input.Role;
 
 
-
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
-
-                    
+                    // added roles to AspNetUsers
                     await _userManager.AddToRoleAsync(user, Input.Role);
-
+                    // created user in Users
                     var userViewModel = CreateUserViewModel(user);
                     _context.Users.Add(userViewModel);
+
+
+                    // Add user to patient or doctor table
+                    if (Input.Role == "Doctor")
+                    {
+                        var doctor = new DoctorViewModel
+                        {
+                            Id = user.Id,
+                            Email = user.Email,
+                            FirstName = user.FirstName,
+                            LastName = user.LastName,
+                            PhoneNumber = user.PhoneNumber,
+                            City = user.City,
+                            Country = user.Country,
+                            ZipCode = user.ZipCode,
+
+                        };
+                        _context.Doctors.Add(doctor);
+                    }
+                    else if (Input.Role == "Patient")
+                    {
+                        var patient = new PatientViewModel
+                        {
+                            Id = user.Id,
+                            Email = user.Email,
+                            FirstName = user.FirstName,
+                            LastName = user.LastName,
+                            PhoneNumber = user.PhoneNumber,
+                            City = user.City,
+                            Country = user.Country,
+                            ZipCode = user.ZipCode,
+
+                        };
+                        _context.Patients.Add(patient);
+                    }
+
+                    // Save changes to database
                     await _context.SaveChangesAsync();
 
                     _logger.LogInformation("User created a new account with password.");
