@@ -30,43 +30,19 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Treatments
 
         public async Task<IActionResult> OnPostDeleteAsync(int id)
         {
-            // Find the visit with the specified ID in the database
-            var visit = await _context.Treatments.FindAsync(id);
+            var treatment = await _context.Treatments.FindAsync(id);
 
-            if (visit == null)
+            if (treatment == null)
             {
                 return NotFound();
             }
 
-            // Remove the visit from the database and save changes
-            _context.Treatments.Remove(visit);
+            _context.Treatments.Remove(treatment);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("Visit");
+            return RedirectToPage("/Account/Treatments/Visit");
         }
 
-        public IActionResult OnPostAdd()
-        {
-            // Redirect to the AddVisit page
-            return RedirectToPage("AddVisit");
-        }
-
-        public async Task<IActionResult> OnPostEditAsync(int id)
-        {
-            // Find the visit with the specified ID in the database
-            var visit = await _context.Treatments.FindAsync(id);
-
-            if (visit == null)
-            {
-                return NotFound();
-            }
-
-            // Set the VisitViewModel property of the EditVisit page to the visit we found
-            TempData["VisitViewModel"] = visit;
-
-            // Redirect to the EditVisit page
-            return RedirectToPage("EditVisit");
-        }
     }
 
 }

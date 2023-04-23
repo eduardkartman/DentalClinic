@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace DentalClinicWeb.Areas.Identity.Pages.Account.Treatments
+namespace DentalClinicWeb.Areas.Identity.Pages.Account
 {
     [Authorize(Roles = "Admin")]
     public class CreateVisitModel : PageModel

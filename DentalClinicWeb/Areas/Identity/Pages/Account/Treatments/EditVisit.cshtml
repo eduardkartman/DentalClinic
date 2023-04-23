@@ -1,4 +1,92 @@
-﻿@page
-@model DentalClinicWeb.Areas.Identity.Pages.Account.Treatments.EditVisitModel
+﻿@page "{id}"
+@using DentalClinicWeb.Areas.Identity.Pages.Account.Treatments
+@model EditVisitsModel
 @{
+    ViewData["Title"] = "Edit Treatments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<br />
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="file"></span>
+                            Appointments
+                        </a>
+                    </li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Treatments/Visit">Treatments</a>
+                        </li>
+                    }
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="users"></span>
+                            Patients
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="bar-chart-2"></span>
+                            Reports
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="layers"></span>
+                            Integrations
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- Main Content -->
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Create New Treatment</h1>
+            </div>
+
+            <form method="post">
+                <input type="hidden" asp-for="Input.Id" />
+                <div class="form-group">
+                    <label asp-for="Input.Name"></label>
+                    <input asp-for="Input.Name" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Price"></label>
+                    <input asp-for="Input.Price" class="form-control" type="number" min="0" step="0.5" required />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.DurationInMinutes"></label>
+                    <input asp-for="Input.DurationInMinutes" class="form-control" type="number" min="0" required />
+                </div>
+                <div class="form-group">
+                    <div class="form-check">
+                        <input asp-for="Input.IsAvailable" class="form-check-input" type="checkbox" value="true" />
+                        <label class="form-check-label">Is Available</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Description"></label>
+                    <textarea asp-for="Input.Description" class="form-control"></textarea>
+                </div>
+                <br />
+                <button type="submit" class="btn btn-primary" onclick="return confirm('Are you sure you want to update this treatment?')">Update</button>
+                <a asp-area="Identity" asp-page="/Account/Treatments/Visit" class="btn btn-secondary">Cancel</a>
+            </form>
+
+
+        </main>
+
+    </div>
+
+</div>
