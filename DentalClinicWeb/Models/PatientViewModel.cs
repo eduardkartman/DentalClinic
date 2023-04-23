@@ -4,7 +4,6 @@ namespace DentalClinicWeb.Models
 {
     public class PatientViewModel
     {
-        [Key]
         public string Id { get; set; }
         public string Email { get; set; }
         public string? FirstName { get; set; }
@@ -13,5 +12,10 @@ namespace DentalClinicWeb.Models
         public string? Country { get; set; }
         public string? City { get; set; }
         public string? ZipCode { get; set; }
+
+        public int DiscountThreshold { get; set; }
+
+        public decimal DiscountPercentage { get; set; }
+
     }
 }

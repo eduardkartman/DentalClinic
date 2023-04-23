@@ -13,6 +13,7 @@ namespace DentalClinicWeb.Data
         public DbSet<UserViewModel> Users { get; set; }
         public DbSet<PatientViewModel> Patients { get; set; }
         public DbSet<DoctorViewModel> Doctors { get; set; }
+        public DbSet<TreatmentsViewModel> Treatments { get; set; }
 
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)

@@ -4,7 +4,6 @@ namespace DentalClinicWeb.Models
 {
     public class DoctorViewModel
     {
-        [Key]
         public string Id { get; set; }
         public string Email { get; set; }
         public string? FirstName { get; set; }
@@ -13,5 +12,6 @@ namespace DentalClinicWeb.Models
         public string? Country { get; set; }
         public string? City { get; set; }
         public string? ZipCode { get; set; }
+
     }
 }

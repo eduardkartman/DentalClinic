@@ -1,0 +1,107 @@
+﻿@page
+@using DentalClinicWeb.Areas.Identity.Pages.Account.Treatments
+@model VisitModel
+@{
+    ViewData["Title"] = "Visits";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br/>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="file"></span>
+                            Appointments
+                        </a>
+                    </li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Treatments/Visit">Treatments</a>
+                        </li>
+                    }
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="users"></span>
+                            Patients
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="bar-chart-2"></span>
+                            Reports
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="layers"></span>
+                            Integrations
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+       <!-- Main Content -->
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Treatments</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group mr-2">
+                <button type="button" class="btn btn-sm btn-outline-secondary">Day</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary">Week</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary">Month</button>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                <span data-feather="calendar"></span>
+                This week
+            </button>
+        </div>
+    </div>
+            <div class="col-md-12 mb-4">
+                <a asp-area="Identity" asp-page="/Account/Treatments/CreateVisit" class="btn btn-primary">Create New Visit</a>
+            </div>
+
+
+    <div class="col-md-12">
+        <h3>Treatments Summary</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Treatment</th>
+                    <th>Cost ($) </th>
+                    <th>Duration (min)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var visit in Model.Visits)
+                {
+                    <tr>
+                        <td>@visit.Id</td>
+                        <td>@visit.Name</td>
+                        <td>@visit.Price</td>
+                        <th>@visit.DurationInMinutes</th>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a class="btn btn-sm btn-outline-secondary" href="@Url.Action("Edit", "Visit", new { id = visit.Id })">Edit</a>
+                                <button class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#deleteVisitModal" data-visit-id="@visit.Id">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</main>
+
+    </div>
+
+</div>
