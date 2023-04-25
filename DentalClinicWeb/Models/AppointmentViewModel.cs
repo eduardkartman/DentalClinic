@@ -1,35 +1,45 @@
-﻿using DentalClinicWeb.Data;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Build.Evaluation;
 
 namespace DentalClinicWeb.Models
 {
+    [Table("Appointments")]
     public class AppointmentViewModel
     {
+        [Key]
         public int Id { get; set; }
 
         public string PatientId { get; set; }
-        public PatientViewModel Patient { get; set; }
+        public string PatientName { get; set; }
+        public string PatientEmail { get; set; }
+        public string PatientPhoneNumber { get; set;}
 
+        [ForeignKey("PatientId")]
+        public PatientViewModel Patient { get; set; }
         public string DoctorId { get; set; }
+        public string DoctorName { get; set;}
+        public string DoctorEmail { get; set;}
+        public string DoctorPhoneNumber { get; set;}
+
+        [ForeignKey("DoctorId")]
         public DoctorViewModel Doctor { get; set; }
 
         public int TreatmentId { get; set; }
+        public string TreatmentName { get;set; }
+        public decimal? TreatmentPrice { get; set; }
+        public int? TreatmentDuration { get; set;}
+        public bool TreatmentEnabled { get; set; }
+
+        [ForeignKey("TreatmentId")]
         public TreatmentsViewModel Treatment { get; set; }
 
         public decimal Price { get; set; }
-
         public DateTime AppointmentDateTime { get; set; }
-
-        public int AvailabilityId { get; set; }
-        //public AvailabilityViewModel Availability { get; set; }
 
         public AppointmentStatus Status { get; set; }
 
-        public bool HasDiscount => Patient != null && Patient.DiscountThreshold >= 2;
-
-        public decimal Discount => HasDiscount ? Price * 0.2M : 0M;
+    
     }
-
-
 }

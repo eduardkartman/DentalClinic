@@ -1,0 +1,41 @@
+﻿@page
+@using DentalClinicWeb.Areas.Identity.Pages.Account.Users
+@model CreateDoctorModel
+
+<div class="container mt-5">
+    <h2>Add New Doctor</h2>
+
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="Doctors.Email" class="control-label">Doctor's email'</label>
+            <input asp-for="Doctors.Email" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label asp-for="Doctors.FirstName" class="control-label">Doctor's first name'</label>
+            <input asp-for="Doctors.FirstName" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label asp-for="Doctors.LastName" class="control-label">Doctor's last name'</label>
+            <input asp-for="Doctors.LastName" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label asp-for="Doctors.PhoneNumber" class="control-label">Doctor's phone number'</label>
+            <input asp-for="Doctors.PhoneNumber" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Doctors.Country" class="control-label">Country</label>
+            <input asp-for="Doctors.Country" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Doctors.City" class="control-label">City</label>
+            <input asp-for="Doctors.City" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Doctors.ZipCode" class="control-label">ZIP Code</label>
+            <input asp-for="Doctors.ZipCode" class="form-control" />
+        </div>
+        <br />
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a asp-area="Identity" asp-page="/Account/Users/ManageUsers" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

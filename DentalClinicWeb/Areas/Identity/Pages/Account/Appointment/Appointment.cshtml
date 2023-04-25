@@ -1,0 +1,270 @@
+﻿@page
+@using DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
+@model AppointmentModel
+
+@{
+    ViewData["Title"] = "Create Appointment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (!string.IsNullOrEmpty(Model.StatusMessage))
+{
+    <div class="alert alert-success">
+        @Html.DisplayFor(m => m.StatusMessage)
+    </div>
+}
+
+<br />
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/Appointment">Appointments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Treatments/Visit">Treatments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="users"></span>
+                            Patients
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="bar-chart-2"></span>
+                            Reports
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="layers"></span>
+                            Integrations
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- Main Content -->
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Create An Appointment</h1>
+            </div>
+            <form method="post">
+                <!-- Doctors table -->
+                <!-- Hidden input field to store selected doctor's ID -->
+                <input type="hidden" id="doctorId" name="SelectedDoctorId" value="" />
+                <div class="form-group">
+                    <h3>Select Doctor:</h3>
+                    <table id="doctors-table" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone Number</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var doctor in Model.Doctors)
+                            {
+                                <tr>
+                                    <td>@doctor.FirstName @doctor.LastName</td>
+                                    <td>@doctor.Email</td>
+                                    <td>@doctor.PhoneNumber</td>
+                                    <td>
+                                        <button type="button" class="selectDoctorButton" data-doctor-id="@doctor.Id">Select</button>
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Hidden input field to store selected treatment's ID -->
+                <input type="hidden" id="treatmentId" name="SelectedTreatmentId" value="" />
+                <!-- Treatments table -->
+                <div class="form-group">
+                    <h3>Select Treatment:</h3>
+                    <table id="treatments-table" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Price ($)</th>
+                                <th>Description</th>
+                                <th>Duration (min)</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var treatment in Model.Treatments)
+                            {
+                                <tr>
+                                    <td>@treatment.Name</td>
+                                    <td>@treatment.Price</td>
+                                    <td>@treatment.Description</td>
+                                    <td>@treatment.DurationInMinutes</td>
+                                    <td>
+                                        <button type="button" class="selectTreatmentButton" data-treatment-id="@treatment.Id">Select</button>
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+                <br />
+                <!-- Calendar -->
+                <div class="form-group">
+                    <label for="datetime-picker">Select a Date and Time:</label>
+                    <div class="input-group date" id="datetime-picker" data-target-input="nearest">
+                        <input asp-for="DateTime" type="datetime-local" class="form-control" />
+                        <div class="input-group-append" data-target="#datetime-picker" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </main>
+    </div>
+</div>
+
+<style>
+    .selectedRow {
+        outline: 2px solid #007bff;
+    }
+
+    .selectDoctorButton,
+    .selectTreatmentButton {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        padding: 5px 10px;
+        border-radius: 3px;
+    }
+
+   .selectDoctorButton.selected,
+   .selectTreatmentButton.selected {
+       background-color: #28a745;
+     }
+</style>
+
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- JavaScript code -->
+    <script>
+        var selectedTreatmentId = null; // Store selected treatment ID
+
+        $(document).ready(function () {
+            // Capture selected doctor's ID
+            $(".selectDoctorButton").click(function () {
+                var doctorId = $(this).data("doctor-id");
+                $("#doctorId").val(doctorId);
+                $("tr").removeClass("selectedRow"); // Remove selection from all rows
+                $(this).closest("tr").addClass("selectedRow"); // Add selection to clicked row
+            });
+
+            // Capture selected treatment's ID
+            $(".selectTreatmentButton").click(function () {
+                var treatmentId = $(this).data("treatment-id");
+                $("#treatmentId").val(treatmentId);
+                $("tr").removeClass("selectedRow"); // Remove selection from all rows
+
+                // Add selection to clicked row and remember selected treatment ID
+                $(this).closest("tr").addClass("selectedRow");
+                selectedTreatmentId = treatmentId;
+
+                // Add selection to doctor row based on selected treatment ID
+                $(".selectDoctorButton").closest("tr").removeClass("selectedRow");
+                $(".selectDoctorButton[data-doctor-id='" + selectedTreatmentId + "']").closest("tr").addClass("selectedRow");
+            });
+
+            // Highlight the doctor row if a treatment is pre-selected
+            selectedTreatmentId = $("#treatmentId").val();
+            if (selectedTreatmentId) {
+                $(".selectDoctorButton[data-doctor-id='" + selectedTreatmentId + "']").closest("tr").addClass("selectedRow");
+            }
+        });
+    </script>
+
+
+
+    <script>
+        $(function () {
+            $('#datetime-picker').datetimepicker({
+                format: 'YYYY-MM-DD HH:mm',
+                minDate: moment(),
+                disabledHours: [0, 1, 2, 3, 4, 5, 6, 7, 8, 19, 20, 21, 22, 23],
+                enabledHours: [9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
+                stepping: 15,
+                sideBySide: true,
+                icons: {
+                    time: 'fa fa-clock-o',
+                    date: 'fa fa-calendar',
+                    up: 'fa fa-chevron-up',
+                    down: 'fa fa-chevron-down',
+                    previous: 'fa fa-chevron-left',
+                    next: 'fa fa-chevron-right',
+                    today: 'fa fa-screenshot',
+                    clear: 'fa fa-trash',
+                    close: 'fa fa-remove'
+                },
+                disabledDates: [/* array of disabled dates, if any */],
+                beforeShowDay: function (date) {
+                    var disabled = true; // by default, the date is disabled
+                    var currentDate = moment(date);
+                    var appointmentCount = 0; // initialize appointment count to zero
+
+                    // loop through appointments to check if the selected doctor has more than 5 appointments on the current date
+                    for (var i = 0; i < appointments.length; i++) {
+                        var appointmentDate = moment(appointments[i].date, 'YYYY-MM-DD HH:mm');
+                        var appointmentDoctor = appointments[i].doctor;
+
+                        if (currentDate.isSame(appointmentDate, 'day') && appointmentDoctor === selectedDoctor) {
+                            appointmentCount++;
+                        }
+                    }
+
+                    // check if the selected date is not disabled and the selected doctor has less than 5 appointments on the selected date
+                    if (!dateIsDisabled(date) && appointmentCount < 5) {
+                        disabled = false;
+                    }
+
+                    return [disabled, ''];
+                },
+                tooltips: {
+                    // tooltip message to show when the date is disabled
+                    disabled: 'This date is not available for the selected doctor. Please choose another date.'
+                }
+            });
+        });
+
+        // function to check if the selected date is disabled (weekends, holidays, etc.)
+        function dateIsDisabled(date) {
+            var disabled = false;
+            var currentDate = moment(date);
+
+            // check if the date is a weekend day
+            if (currentDate.day() === 0 || currentDate.day() === 6) {
+                disabled = true;
+            }
+
+            // add more conditions to disable specific dates, if any
+
+            return disabled;
+        }
+    </script>
+}

@@ -16,17 +16,11 @@
                         <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file"></span>
-                            Appointments
-                        </a>
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/Appointment">Appointments</a>
                     </li>
-                    @if (User.IsInRole("Admin"))
-                    {
                         <li class="nav-item">
                             <a class="nav-link" asp-area="Identity" asp-page="/Account/Treatments/Visit">Treatments</a>
                         </li>
-                    }
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <span data-feather="users"></span>
@@ -52,17 +46,7 @@
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Treatments</h1>
-        <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-group mr-2">
-                <button type="button" class="btn btn-sm btn-outline-secondary">Day</button>
-                <button type="button" class="btn btn-sm btn-outline-secondary">Week</button>
-                <button type="button" class="btn btn-sm btn-outline-secondary">Month</button>
-            </div>
-            <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                <span data-feather="calendar"></span>
-                This week
-            </button>
-        </div>
+
     </div>
             <div class="col-md-12 mb-4">
                 <a asp-area="Identity" asp-page="/Account/Treatments/CreateVisit" class="btn btn-primary">Create New Treatment</a>

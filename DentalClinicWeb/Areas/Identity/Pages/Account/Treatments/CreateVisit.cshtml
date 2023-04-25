@@ -16,17 +16,11 @@
                         <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file"></span>
-                            Appointments
-                        </a>
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/Appointment">Appointments</a>
                     </li>
-                    @if (User.IsInRole("Admin"))
-                    {
                         <li class="nav-item">
                             <a class="nav-link" asp-area="Identity" asp-page="/Account/Treatments/Visit">Treatments</a>
                         </li>
-                    }
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <span data-feather="users"></span>

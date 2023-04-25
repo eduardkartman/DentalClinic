@@ -14,6 +14,7 @@ namespace DentalClinicWeb.Data
         public DbSet<PatientViewModel> Patients { get; set; }
         public DbSet<DoctorViewModel> Doctors { get; set; }
         public DbSet<TreatmentsViewModel> Treatments { get; set; }
+        public DbSet<AppointmentViewModel> Appointments { get; set; }
 
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -25,6 +26,9 @@ namespace DentalClinicWeb.Data
         {
             base.OnModelCreating(builder);
             builder.ApplyConfiguration(new ApplicationEntityConfiguration());
+            builder.Entity<AppointmentViewModel>()
+                    .HasIndex(e => new { e.PatientId, e.DoctorId, e.TreatmentId, e.AppointmentDateTime })
+                    .IsUnique();
 
         }
     }
