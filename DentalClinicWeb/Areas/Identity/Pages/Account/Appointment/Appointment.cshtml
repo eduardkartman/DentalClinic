@@ -58,7 +58,6 @@
             <form method="post">
                 <!-- Doctors table -->
                 <!-- Hidden input field to store selected doctor's ID -->
-                <input type="hidden" id="doctorId" name="SelectedDoctorId" value="" />
                 <div class="form-group">
                     <h3>Select Doctor:</h3>
                     <table id="doctors-table" class="table table-striped">
@@ -79,15 +78,13 @@
                                     <td>@doctor.PhoneNumber</td>
                                     <td>
                                         <button type="button" class="selectDoctorButton" data-doctor-id="@doctor.Id">Select</button>
-
+                                        <input asp-for="Appointment.DoctorId" type="hidden" id="doctorId" />
                                     </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
                 </div>
-                <!-- Hidden input field to store selected treatment's ID -->
-                <input type="hidden" id="treatmentId" name="SelectedTreatmentId" value="" />
                 <!-- Treatments table -->
                 <div class="form-group">
                     <h3>Select Treatment:</h3>
@@ -111,6 +108,7 @@
                                     <td>@treatment.DurationInMinutes</td>
                                     <td>
                                         <button type="button" class="selectTreatmentButton" data-treatment-id="@treatment.Id">Select</button>
+                                        <input asp-for="Appointment.TreatmentId" type="hidden" id="treatmentId" />
 
                                     </td>
                                 </tr>
@@ -167,12 +165,14 @@
     <!-- JavaScript code -->
     <script>
         var selectedTreatmentId = null; // Store selected treatment ID
+        var selectedDoctorId = null; // Store selected doctor ID
 
         $(document).ready(function () {
             // Capture selected doctor's ID
             $(".selectDoctorButton").click(function () {
                 var doctorId = $(this).data("doctor-id");
                 $("#doctorId").val(doctorId);
+                selectedDoctorId = doctorId;
                 $("tr").removeClass("selectedRow"); // Remove selection from all rows
                 $(this).closest("tr").addClass("selectedRow"); // Add selection to clicked row
             });
@@ -181,24 +181,16 @@
             $(".selectTreatmentButton").click(function () {
                 var treatmentId = $(this).data("treatment-id");
                 $("#treatmentId").val(treatmentId);
+                selectedTreatmentId = treatmentId;
                 $("tr").removeClass("selectedRow"); // Remove selection from all rows
 
-                // Add selection to clicked row and remember selected treatment ID
+                // Add selection to clicked row and corresponding doctor row
                 $(this).closest("tr").addClass("selectedRow");
-                selectedTreatmentId = treatmentId;
-
-                // Add selection to doctor row based on selected treatment ID
-                $(".selectDoctorButton").closest("tr").removeClass("selectedRow");
-                $(".selectDoctorButton[data-doctor-id='" + selectedTreatmentId + "']").closest("tr").addClass("selectedRow");
+                $(".selectDoctorButton[data-doctor-id='" + selectedDoctorId + "']").closest("tr").addClass("selectedRow");
             });
-
-            // Highlight the doctor row if a treatment is pre-selected
-            selectedTreatmentId = $("#treatmentId").val();
-            if (selectedTreatmentId) {
-                $(".selectDoctorButton[data-doctor-id='" + selectedTreatmentId + "']").closest("tr").addClass("selectedRow");
-            }
         });
     </script>
+
 
 
 

@@ -39,7 +39,6 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
         [BindProperty]
         public DateTime DateTime { get; set; }
 
-
         public async Task<IActionResult> OnGetAsync()
         {
             Doctors = await _context.Doctors.ToListAsync();
@@ -77,28 +76,31 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
 
             // Save the appointment to the database
             var user = await _userManager.GetUserAsync(User);
+            var patientId = user.Id;
 
-            var doctorId = Request.Form["doctorId"];
+            var patient = await _context.Patients.FindAsync(patientId);
+
+            var doctorId = Appointment.DoctorId;
             var doctor = await _context.Doctors.FindAsync(doctorId);
 
-            var treatmentId = int.Parse(Request.Form["treatmentId"]);
+            var treatmentId = Appointment.TreatmentId;
             var treatment = await _context.Treatments.FindAsync(treatmentId);
-
 
             var appointment = new AppointmentViewModel
             {
-                PatientId = user.Id,
-                PatientName = user.FirstName + user.LastName,
-                PatientEmail = user.Email,
-                PatientPhoneNumber = user.PhoneNumber,
-                DoctorId = doctor.Id,
+                PatientId = patient.Id,
+                PatientName = patient.FirstName + patient.LastName,
+                PatientEmail = patient.Email,
+                PatientPhoneNumber = patient.PhoneNumber,
+                DoctorId = doctorId,
                 DoctorName = doctor.FirstName + doctor.LastName,
                 DoctorEmail = doctor.Email,
                 DoctorPhoneNumber = doctor.PhoneNumber,
-                TreatmentId = treatment.Id,
+                TreatmentId = treatmentId,
                 TreatmentName = treatment.Name,
                 TreatmentPrice = treatment.Price,
                 TreatmentDuration = treatment.DurationInMinutes,
+                TreatmentEnabled = treatment.IsAvailable,
                 AppointmentDateTime = DateTime,
             };
 
@@ -106,7 +108,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
             await _context.SaveChangesAsync();
 
 
-            return RedirectToAction("/Home/Index");
+            return RedirectToPage("/Account/Appointment/Appointment");
         }
 
     }

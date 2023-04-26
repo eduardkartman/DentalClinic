@@ -4,13 +4,14 @@
     {
         public static bool HasDiscount(this AppointmentViewModel appointment)
         {
-            return appointment.Patient != null && appointment.Patient.DiscountThreshold >= 2;
+            return appointment.Patients != null && appointment.Patients.DiscountThreshold >= 2;
         }
-
+        /*
         public static decimal Discount(this AppointmentViewModel appointment)
         {
-            return appointment.HasDiscount() ? appointment.Price * 0.2M : 0M;
+            return appointment.HasDiscount() ? appointment.TreatmentPrice * 0.2M : 0M;
         }
+        */
 
         public static bool IsAvailable(this AppointmentViewModel appointment)
         {

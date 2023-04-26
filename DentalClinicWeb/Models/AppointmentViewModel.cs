@@ -17,14 +17,14 @@ namespace DentalClinicWeb.Models
         public string PatientPhoneNumber { get; set;}
 
         [ForeignKey("PatientId")]
-        public PatientViewModel Patient { get; set; }
+        public PatientViewModel Patients { get; set; }
         public string DoctorId { get; set; }
         public string DoctorName { get; set;}
         public string DoctorEmail { get; set;}
         public string DoctorPhoneNumber { get; set;}
 
         [ForeignKey("DoctorId")]
-        public DoctorViewModel Doctor { get; set; }
+        public DoctorViewModel Doctors { get; set; }
 
         public int TreatmentId { get; set; }
         public string TreatmentName { get;set; }
@@ -35,7 +35,6 @@ namespace DentalClinicWeb.Models
         [ForeignKey("TreatmentId")]
         public TreatmentsViewModel Treatment { get; set; }
 
-        public decimal Price { get; set; }
         public DateTime AppointmentDateTime { get; set; }
 
         public AppointmentStatus Status { get; set; }
