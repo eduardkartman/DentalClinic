@@ -6,22 +6,35 @@
     ViewData["Title"] = "Create Appointment";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 @if (!string.IsNullOrEmpty(Model.StatusMessage))
 {
     <div class="alert alert-success">
         @Html.DisplayFor(m => m.StatusMessage)
     </div>
 }
+@if (!ModelState.IsValid)
+{
+    <script>
+        var errorMessage = "Errors:\n";
+        @foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <text>errorMessage += "- @Html.Raw(error.ErrorMessage)\n"; </text>
+        }
+            alert(errorMessage);
+    </script>
+}
+
 
 <br />
-<div class="container-fluid">
+<div class="container-fluid" id="error-box">
     <div class="row">
         <!-- Sidebar -->
         <nav class="col-md-2 d-none d-md-block bg-light sidebar">
             <div class="sidebar-sticky">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a>
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="PatientView">Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/Appointment">Appointments</a>
@@ -129,7 +142,7 @@
                     </div>
                 </div>
                 <br />
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button id="submitBtn" type="submit" class="btn btn-primary">Submit</button>
             </form>
         </main>
     </div>
@@ -177,6 +190,12 @@
                 $(this).closest("tr").addClass("selectedRow"); // Add selection to clicked row
             });
 
+            // Capture unselect doctor event
+            $(".unselectDoctorButton").click(function () {
+                selectedDoctorId = null;
+                $(this).closest("tr").removeClass("selectedRow"); // Remove selection from clicked row
+            });
+
             // Capture selected treatment's ID
             $(".selectTreatmentButton").click(function () {
                 var treatmentId = $(this).data("treatment-id");
@@ -188,8 +207,30 @@
                 $(this).closest("tr").addClass("selectedRow");
                 $(".selectDoctorButton[data-doctor-id='" + selectedDoctorId + "']").closest("tr").addClass("selectedRow");
             });
+
+            // Add click event handler for the submit button
+            $('#submitBtn').on('click', function () {
+                var doctorId = $('#doctorId').val();
+                if (!doctorId) {
+                    alert('Please select a doctor.');
+                    return false;
+                }
+
+                var treatmentId = $('#treatmentId').val();
+                if (!treatmentId) {
+                    alert('Please select a treatment.');
+                    return false;
+                }
+
+                // Check if a date is selected
+                if (!$('#DateTime').val()) {
+                    alert('Please select a date.');
+                    return false;
+                }
+            });
         });
     </script>
+
 
 
 
@@ -259,4 +300,5 @@
             return disabled;
         }
     </script>
+
 }

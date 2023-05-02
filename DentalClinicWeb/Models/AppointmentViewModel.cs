@@ -36,6 +36,7 @@ namespace DentalClinicWeb.Models
         public TreatmentsViewModel Treatment { get; set; }
 
         public DateTime AppointmentDateTime { get; set; }
+        public DateTime EndAppointmentDateTime { get; set; }
 
         public AppointmentStatus Status { get; set; }
 

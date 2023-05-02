@@ -12,15 +12,33 @@
         <nav class="col-md-2 d-none d-md-block bg-light sidebar">
             <div class="sidebar-sticky">
                 <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/Appointment">Appointments</a>
-                    </li>
+
+                    @if (User.IsInRole("Patient"))
+                    {
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Treatments/Visit">Treatments</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="PatientView">Dashboard</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/Appointment">Appointments</a>
+                        </li>
+                    }
+
+                    @if (User.IsInRole("Doctor"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="DoctorView">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/DoctorAppointment">Manage Appointments</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/HistoryAppointment">Appointments</a>
+                        </li>
+                    }
+
+                    <li class="nav-item">
+                         <a class="nav-link" asp-area="Identity" asp-page="/Account/Treatments/Visit">Treatments</a>
+                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <span data-feather="users"></span>
@@ -48,10 +66,12 @@
         <h1 class="h2">Treatments</h1>
 
     </div>
+            @if (User.IsInRole("Admin"))
+      {
             <div class="col-md-12 mb-4">
                 <a asp-area="Identity" asp-page="/Account/Treatments/CreateVisit" class="btn btn-primary">Create New Treatment</a>
             </div>
-
+      }
 
     <div class="col-md-12">
         <h3>Treatments Summary</h3>

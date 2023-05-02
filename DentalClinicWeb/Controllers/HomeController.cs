@@ -11,7 +11,6 @@ using System.Security.AccessControl;
 
 namespace DentalClinicWeb.Controllers
 {
-    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -25,7 +24,13 @@ namespace DentalClinicWeb.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Patient")]
+        public async Task<IActionResult> PatientView()
         {
             var user = _userManager.GetUserAsync(User).Result;
             ViewBag.FirstName = user.FirstName;
@@ -35,7 +40,92 @@ namespace DentalClinicWeb.Controllers
             ViewBag.Country = user.Country;
             ViewBag.City = user.City;
             ViewBag.ZipCode = user.ZipCode;
-            ViewBag.Role =user.Role;
+            ViewBag.Role = user.Role;
+
+            var patientId = user.Id;
+            var todaysAppointments = await _context.Appointments
+                    .Include(a => a.Treatment)
+                    .Include(a => a.Doctors)
+                    .OrderBy(a => a.AppointmentDateTime)
+                    .Where(a => a.PatientId == patientId && a.AppointmentDateTime.Date == DateTime.Now.Date)
+                    .Select(a => new AppointmentViewModel
+                    {
+                        Id = a.Id,
+                        TreatmentName = a.Treatment.Name,
+                        AppointmentDateTime = a.AppointmentDateTime,
+                        EndAppointmentDateTime = a.EndAppointmentDateTime,
+                        TreatmentPrice = a.TreatmentPrice,
+                        DoctorEmail = a.DoctorEmail,
+                        DoctorPhoneNumber = a.DoctorPhoneNumber,
+                        Status = a.Status,
+                    })
+                    .ToListAsync();
+            ViewBag.TodaysAppointments = todaysAppointments;
+
+            var upcomingAppointments = await _context.Appointments
+                .Include(a => a.Treatment)
+                .Include(a => a.Doctors)
+                .OrderBy(a => a.AppointmentDateTime)
+                .Where(a => a.PatientId == patientId && a.AppointmentDateTime.Date > DateTime.Now.Date)
+                .Select(a => new AppointmentViewModel
+                {
+                    Id = a.Id,
+                    TreatmentName = a.Treatment.Name,
+                    AppointmentDateTime = a.AppointmentDateTime,
+                    EndAppointmentDateTime = a.EndAppointmentDateTime,
+                    TreatmentPrice = a.Treatment.Price,
+                    DoctorEmail = a.Doctors.Email,
+                    DoctorPhoneNumber = a.Doctors.PhoneNumber,
+                    Status = a.Status,
+                })
+                .ToListAsync();
+
+            ViewBag.UpcomingAppointments = upcomingAppointments;
+
+            return View();
+        }
+
+        [Authorize(Roles = "Doctor")]
+        public async Task<IActionResult> DoctorView()
+        {
+            var user = _userManager.GetUserAsync(User).Result;
+            var doctorId = user.Id;
+
+            var todaysAppointments = await _context.Appointments
+                              .Include(a => a.Treatment)
+                              .Include(a => a.Patients)
+                              .Where(a => a.DoctorId == doctorId && a.AppointmentDateTime.Date == DateTime.Now.Date)
+                              .Select(a => new AppointmentViewModel
+                              {
+                                  Id = a.Id,
+                                  TreatmentName = a.Treatment.Name,
+                                  AppointmentDateTime = a.AppointmentDateTime,
+                                  EndAppointmentDateTime = a.EndAppointmentDateTime,
+                                  TreatmentPrice = a.TreatmentPrice,
+                                  DoctorEmail = a.DoctorEmail,
+                                  DoctorPhoneNumber = a.DoctorPhoneNumber,
+                              })
+                              .ToListAsync();
+
+            ViewBag.TodaysAppointments = todaysAppointments;
+
+            var upcomingAppointments = await _context.Appointments
+                .Include(a => a.Treatment)
+                .Include(a => a.Patients)
+                .Where(a => a.DoctorId == doctorId && a.AppointmentDateTime.Date > DateTime.Now.Date)
+                .Select(a => new AppointmentViewModel
+                {
+                    Id = a.Id,
+                    TreatmentName = a.Treatment.Name,
+                    AppointmentDateTime = a.AppointmentDateTime,
+                    EndAppointmentDateTime = a.EndAppointmentDateTime,
+                    TreatmentPrice = a.Treatment.Price,
+                    DoctorEmail = a.Doctors.Email,
+                    DoctorPhoneNumber = a.Doctors.PhoneNumber,
+                })
+                .ToListAsync();
+
+            ViewBag.UpcomingAppointments = upcomingAppointments;
 
             return View();
         }

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using NuGet.Common;
 
 namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
 {
@@ -50,30 +51,6 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
 
         public async Task<IActionResult> OnPostAsync()
         {
-            // Check if the selected date and time is available for the selected doctor
-            var appointmentsForDoctor = await _context.Appointments
-                .Where(a => a.DoctorId == Appointment.DoctorId && a.AppointmentDateTime.Date == Appointment.AppointmentDateTime.Date)
-                .ToListAsync();
-            var timeSlotTaken = appointmentsForDoctor.Any(a => (Appointment.AppointmentDateTime - a.AppointmentDateTime).TotalMinutes < 120);
-
-            if (timeSlotTaken)
-            {
-                ModelState.AddModelError(string.Empty, "The selected time slot is already taken. Please choose another one.");
-                Doctors = await _context.Doctors.ToListAsync();
-                Treatments = await _context.Treatments.ToListAsync();
-                return Page();
-            }
-
-            // Check if the selected doctor already has 5 appointments for the selected day
-            var numberOfAppointmentsForDoctor = appointmentsForDoctor.Count();
-            if (numberOfAppointmentsForDoctor >= 5)
-            {
-                ModelState.AddModelError(string.Empty, "The selected doctor already has 5 appointments for the selected day. Please choose another doctor or another date.");
-                Doctors = await _context.Doctors.ToListAsync();
-                Treatments = await _context.Treatments.ToListAsync();
-                return Page();
-            }
-
             // Save the appointment to the database
             var user = await _userManager.GetUserAsync(User);
             var patientId = user.Id;
@@ -86,30 +63,128 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
             var treatmentId = Appointment.TreatmentId;
             var treatment = await _context.Treatments.FindAsync(treatmentId);
 
-            var appointment = new AppointmentViewModel
+            ModelState.Clear();
+
+            // Set the starting time and end time of the new appointment based on the selected treatment duration
+            DateTime startingAppointmentDateTime = DateTime;
+            DateTime endAppointmentDateTime = startingAppointmentDateTime.AddMinutes((double)treatment.DurationInMinutes);
+            DateTime openingTime = new DateTime(DateTime.Year, DateTime.Month, DateTime.Day, 9, 0, 0);
+            DateTime closingTime = new DateTime(DateTime.Year, DateTime.Month, DateTime.Day, 18, 0, 0);
+
+            // Verify that the appointment time falls between 9 AM and 6 PM
+            if (startingAppointmentDateTime.TimeOfDay < openingTime.TimeOfDay || endAppointmentDateTime.TimeOfDay > closingTime.TimeOfDay)
             {
-                PatientId = patient.Id,
-                PatientName = patient.FirstName + patient.LastName,
-                PatientEmail = patient.Email,
-                PatientPhoneNumber = patient.PhoneNumber,
-                DoctorId = doctorId,
-                DoctorName = doctor.FirstName + doctor.LastName,
-                DoctorEmail = doctor.Email,
-                DoctorPhoneNumber = doctor.PhoneNumber,
-                TreatmentId = treatmentId,
-                TreatmentName = treatment.Name,
-                TreatmentPrice = treatment.Price,
-                TreatmentDuration = treatment.DurationInMinutes,
-                TreatmentEnabled = treatment.IsAvailable,
-                AppointmentDateTime = DateTime,
-            };
+                ModelState.AddModelError(string.Empty, "The selected appointment time is outside the working hours (9AM-6PM). Please choose another time.");
+                Doctors = await _context.Doctors.ToListAsync();
+                Treatments = await _context.Treatments.ToListAsync();
+                return Page();
+            }
 
-            _context.Appointments.Add(appointment);
-            await _context.SaveChangesAsync();
+            // Check if the selected date and time is available for the selected doctor
+            var appointmentsForDoctor = await _context.Appointments
+                .Where(a => a.DoctorId == Appointment.DoctorId
+                    && a.AppointmentDateTime.Date == startingAppointmentDateTime.Date)
+                .ToListAsync();
 
 
-            return RedirectToPage("/Account/Appointment/Appointment");
+            if (appointmentsForDoctor.Count >= 5)
+            {
+                    ModelState.AddModelError(string.Empty, $"The selected doctor already has reached the maximum appointments number for the selected day. Please choose another doctor or another date.");
+
+                Doctors = await _context.Doctors.ToListAsync();
+                Treatments = await _context.Treatments.ToListAsync();
+                return Page();
+            }
+
+            // Check if the selected treatment overlaps with any existing appointments for the selected doctor
+            if (appointmentsForDoctor.Count > 1)
+            {
+                // Sort the appointments by the start time
+                appointmentsForDoctor = appointmentsForDoctor.OrderBy(a => a.AppointmentDateTime).ToList();
+                int numberOfGaps = appointmentsForDoctor.Count + 1;
+                int[] gapsInMinutes = new int[numberOfGaps];
+                DateTime[] gapStartTimes = new DateTime[appointmentsForDoctor.Count + 1];
+
+                // Calculate the gaps between appointments in minutes
+                for (int i = 0; i < numberOfGaps; i++)
+                {
+                    if (i == 0)
+                    {
+                        gapsInMinutes[i] = (int)(appointmentsForDoctor[i].AppointmentDateTime - openingTime).TotalMinutes;
+                        if (gapsInMinutes[i] != 0)
+                        {
+                            gapStartTimes[i] = openingTime;
+                        }
+                    }
+                    else if (i == (numberOfGaps - 1))
+                    {
+                        gapsInMinutes[i] = (int)(closingTime - appointmentsForDoctor[i - 1].EndAppointmentDateTime).TotalMinutes;
+                        gapStartTimes[i] = appointmentsForDoctor[i - 1].EndAppointmentDateTime;
+                    }
+                    else
+                    {
+                        gapsInMinutes[i] = (int)(appointmentsForDoctor[i].AppointmentDateTime.TimeOfDay - appointmentsForDoctor[i - 1].EndAppointmentDateTime.TimeOfDay).TotalMinutes;
+                        gapStartTimes[i] = appointmentsForDoctor[i - 1].EndAppointmentDateTime;
+                    }
+                }
+
+
+                for (int i = 0; i <= appointmentsForDoctor.Count; i++)
+                {
+                    if (i <= appointmentsForDoctor.Count && gapsInMinutes[i] > treatment.DurationInMinutes )
+                    {
+                        // There is a gap big enough to fit the appointment
+                        DateTime gapStart = gapStartTimes[i];
+                        DateTime gapEnd = (i < appointmentsForDoctor.Count) ? appointmentsForDoctor[i].AppointmentDateTime : closingTime;
+
+
+                        int gapDuration = gapsInMinutes[i];
+                        if (gapDuration > treatment.DurationInMinutes && startingAppointmentDateTime > gapStart && endAppointmentDateTime < gapEnd || gapEnd < startingAppointmentDateTime)
+                        {
+                            // Use the exact gap that matches the selected starting and ending time
+                            var appointment = new AppointmentViewModel
+                            {
+                                PatientId = patient.Id,
+                                PatientName = patient.FirstName + patient.LastName,
+                                PatientEmail = patient.Email,
+                                PatientPhoneNumber = patient.PhoneNumber,
+                                DoctorId = doctorId,
+                                DoctorName = doctor.FirstName + doctor.LastName,
+                                DoctorEmail = doctor.Email,
+                                DoctorPhoneNumber = doctor.PhoneNumber,
+                                TreatmentId = treatmentId,
+                                TreatmentName = treatment.Name,
+                                TreatmentPrice = treatment.Price,
+                                TreatmentDuration = treatment.DurationInMinutes,
+                                TreatmentEnabled = treatment.IsAvailable,
+                                AppointmentDateTime = startingAppointmentDateTime,
+                                EndAppointmentDateTime = endAppointmentDateTime,
+                            };
+
+                            _context.Appointments.Add(appointment);
+                            await _context.SaveChangesAsync();
+                            ModelState.AddModelError(string.Empty, "Your appointment has been saved succesfully!");
+                            return RedirectToPage("/Home/PatientView");
+                        }
+                        else if (gapDuration > treatment.DurationInMinutes)
+                        {
+                            // Recommend the available gap
+                            string recommendedTime = $"{gapStart.AddMinutes(10).ToString("hh:mm tt")} - {gapEnd.AddMinutes(-10).ToString("hh:mm tt")}";
+                            ModelState.AddModelError(string.Empty, $"The selected treatment requires {treatment.DurationInMinutes} minutes. We recommend using the available gap between {recommendedTime}.");
+                            Doctors = await _context.Doctors.ToListAsync();
+                            Treatments = await _context.Treatments.ToListAsync();
+                            return Page();
+                        }
+                    }
+                }
+
+            }
+            // No available gaps were found
+            ModelState.AddModelError(string.Empty, $"The selected treatment requires {treatment.DurationInMinutes} minutes, but there are no available gaps today. Please choose another day.");
+            Doctors = await _context.Doctors.ToListAsync();
+            Treatments = await _context.Treatments.ToListAsync();
+            return RedirectToPage("/Home/PatientView");
+
         }
-
     }
 }

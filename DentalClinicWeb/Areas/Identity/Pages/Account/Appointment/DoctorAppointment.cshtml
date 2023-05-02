@@ -1,0 +1,106 @@
+﻿@page
+@using DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
+@model DoctorAppointmentModel
+
+@{
+    ViewData["Title"] = "Manage Appointments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .rounded-frame {
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+
+</style>
+
+<div class="container-fluid">
+    <br />
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="@Url.Action("DoctorView", "Home")">
+                            <span data-feather="home"></span>
+                            Dashboard <span class="sr-only"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/DoctorAppointment">Manage Appointments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/HistoryAppointment">Appointments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Treatments/Visit">Treatments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="users"></span>
+                            Patients
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="bar-chart-2"></span>
+                            Reports
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="layers"></span>
+                            Integrations
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- Main Content -->
+        <main role="main" class="col-md-8 ml-sm-auto col-lg-10 px-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Manage Appointments</h1>
+            </div>
+            <div class="row">
+                <table class="table table-striped table-sm">
+                    <thead>
+                        <tr>
+                            <th>Patient Name</th>
+                            <th>Date</th>
+                            <th>Treatment</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var appointment in Model.Appointments)
+                        {
+                            <tr>
+                                <td>@appointment.Patients.FirstName @appointment.Patients.LastName</td>
+                                <td>@appointment.AppointmentDateTime.ToString("MM/dd/yyyy h:mm tt")</td>
+                                <td>@appointment.Treatment.Name</td>
+                                <td>@appointment.Status.ToString()</td>
+                                <td>
+                                    @if (appointment.Status == DentalClinicWeb.Models.AppointmentStatus.Pending)
+                                    {
+                                        <form method="post">
+                                            <input type="hidden" name="appointmentId" value="@appointment.Id" />
+                                            <select name="status" class="form-control">
+                                                <option value="Accepted">Accepted</option>
+                                                <option value="Cancelled">Declined</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-primary">Update</button>
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</div>

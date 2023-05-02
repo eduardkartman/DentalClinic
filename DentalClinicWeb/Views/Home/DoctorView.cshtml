@@ -1,0 +1,125 @@
+﻿@{
+    ViewData["Title"] = "Dental Clinic";
+
+}
+<style>
+    .rounded-frame {
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+
+</style>
+
+<div class="container-fluid">
+    <br />
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="@Url.Action("DoctorView", "Home")">
+                            <span data-feather="home"></span>
+                            Dashboard <span class="sr-only"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/DoctorAppointment">Manage Appointments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/HistoryAppointment">Appointments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Treatments/Visit">Treatments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="users"></span>
+                            Patients
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="bar-chart-2"></span>
+                            Reports
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="layers"></span>
+                            Integrations
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Dashboard</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group mr-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Day</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Week</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Month</button>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                        <span data-feather="calendar"></span>
+                        This week
+                    </button>
+                </div>
+            </div>
+            <!-- Account Details -->
+            <div class="row">
+
+                <div class="col-md-6">
+                </div>
+                <!-- Appointment Summary -->
+                <div class="col-md-6">
+                    <div class="rounded-frame p-2 frame">
+                        <h2>Today's Appointments</h2>
+                        @if (ViewBag.TodaysAppointments.Count == 0)
+                        {
+                            <p>No appointments today.</p>
+                        }
+                        else
+                        {
+                            <ul>
+                                @foreach (var appointment in ViewBag.TodaysAppointments)
+                                {
+                                    @if (appointment.Status == DentalClinicWeb.Models.AppointmentStatus.Pending)
+                                    {
+                                        <li>@appointment.TreatmentName - @appointment.AppointmentDateTime.ToString("MM/dd/yyyy h:mm tt")</li>
+                                    }
+                                }
+                            </ul>
+                        }
+                    </div>
+                    <div class="rounded-frame p-2 frame">
+                        <h2>Upcoming Appointments</h2>
+                        @if (ViewBag.UpcomingAppointments.Count == 0 || ViewBag.Status == DentalClinicWeb.Models.AppointmentStatus.Cancelled)
+                        {
+                            <p>No upcoming appointments.</p>
+                        }
+                        else
+                        {
+                            <ul>
+                                @foreach (var appointment in ViewBag.UpcomingAppointments)
+                                {
+                                    @if (appointment.Status == DentalClinicWeb.Models.AppointmentStatus.Pending)
+                                    {
+                                        <li>@appointment.TreatmentName - @appointment.AppointmentDateTime.ToString("MM/dd/yyyy h:mm tt")</li>
+                                    }
+
+                                }
+                            </ul>
+                        }
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
