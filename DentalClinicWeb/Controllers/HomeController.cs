@@ -43,11 +43,12 @@ namespace DentalClinicWeb.Controllers
             ViewBag.Role = user.Role;
 
             var patientId = user.Id;
+
             var todaysAppointments = await _context.Appointments
                     .Include(a => a.Treatment)
                     .Include(a => a.Doctors)
                     .OrderBy(a => a.AppointmentDateTime)
-                    .Where(a => a.PatientId == patientId && a.AppointmentDateTime.Date == DateTime.Now.Date)
+                    .Where(a => a.PatientId == patientId && a.AppointmentDateTime.Date == DateTime.Now.Date && a.Status != AppointmentStatus.Cancelled)
                     .Select(a => new AppointmentViewModel
                     {
                         Id = a.Id,
@@ -66,7 +67,7 @@ namespace DentalClinicWeb.Controllers
                 .Include(a => a.Treatment)
                 .Include(a => a.Doctors)
                 .OrderBy(a => a.AppointmentDateTime)
-                .Where(a => a.PatientId == patientId && a.AppointmentDateTime.Date > DateTime.Now.Date)
+                .Where(a => a.PatientId == patientId && a.AppointmentDateTime.Date > DateTime.Now.Date && a.Status != AppointmentStatus.Cancelled)
                 .Select(a => new AppointmentViewModel
                 {
                     Id = a.Id,
@@ -90,29 +91,31 @@ namespace DentalClinicWeb.Controllers
         {
             var user = _userManager.GetUserAsync(User).Result;
             var doctorId = user.Id;
-
             var todaysAppointments = await _context.Appointments
-                              .Include(a => a.Treatment)
-                              .Include(a => a.Patients)
-                              .Where(a => a.DoctorId == doctorId && a.AppointmentDateTime.Date == DateTime.Now.Date)
-                              .Select(a => new AppointmentViewModel
-                              {
-                                  Id = a.Id,
-                                  TreatmentName = a.Treatment.Name,
-                                  AppointmentDateTime = a.AppointmentDateTime,
-                                  EndAppointmentDateTime = a.EndAppointmentDateTime,
-                                  TreatmentPrice = a.TreatmentPrice,
-                                  DoctorEmail = a.DoctorEmail,
-                                  DoctorPhoneNumber = a.DoctorPhoneNumber,
-                              })
-                              .ToListAsync();
+                           .Include(a => a.Treatment)
+                           .Include(a => a.Patients)
+                           .OrderBy(a => a.AppointmentDateTime)
+                           .Where(a => a.DoctorId == doctorId && a.AppointmentDateTime.Date == DateTime.Now.Date && a.Status != AppointmentStatus.Cancelled)
+                           .Select(a => new AppointmentViewModel
+                           {
+                               Id = a.Id,
+                               TreatmentName = a.Treatment.Name,
+                               AppointmentDateTime = a.AppointmentDateTime,
+                               EndAppointmentDateTime = a.EndAppointmentDateTime,
+                               TreatmentPrice = a.Treatment.Price,
+                               DoctorEmail = a.Doctors.Email,
+                               DoctorPhoneNumber = a.Doctors.PhoneNumber,
+                               Status = a.Status,
+                           })
+                           .ToListAsync();
 
             ViewBag.TodaysAppointments = todaysAppointments;
 
             var upcomingAppointments = await _context.Appointments
                 .Include(a => a.Treatment)
                 .Include(a => a.Patients)
-                .Where(a => a.DoctorId == doctorId && a.AppointmentDateTime.Date > DateTime.Now.Date)
+                .OrderBy(a => a.AppointmentDateTime)
+                .Where(a => a.DoctorId == doctorId && a.AppointmentDateTime.Date > DateTime.Now.Date && a.Status != AppointmentStatus.Cancelled)
                 .Select(a => new AppointmentViewModel
                 {
                     Id = a.Id,
@@ -122,6 +125,7 @@ namespace DentalClinicWeb.Controllers
                     TreatmentPrice = a.Treatment.Price,
                     DoctorEmail = a.Doctors.Email,
                     DoctorPhoneNumber = a.Doctors.PhoneNumber,
+                    Status = a.Status,
                 })
                 .ToListAsync();
 

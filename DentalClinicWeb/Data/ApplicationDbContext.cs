@@ -15,6 +15,7 @@ namespace DentalClinicWeb.Data
         public DbSet<DoctorViewModel> Doctors { get; set; }
         public DbSet<TreatmentsViewModel> Treatments { get; set; }
         public DbSet<AppointmentViewModel> Appointments { get; set; }
+        public DbSet<NotificationModel> Notifications { get; set; }
 
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -29,7 +30,17 @@ namespace DentalClinicWeb.Data
             builder.Entity<AppointmentViewModel>()
                     .HasIndex(e => new { e.PatientId, e.DoctorId, e.TreatmentId, e.AppointmentDateTime })
                     .IsUnique();
+            builder.Entity<NotificationModel>()
+                    .HasOne(n => n.Sender)
+                    .WithMany()
+                    .HasForeignKey(n => n.SenderId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<NotificationModel>()
+                .HasOne(n => n.Receiver)
+                .WithMany()
+                .HasForeignKey(n => n.ReceiverId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
@@ -46,5 +57,6 @@ public class ApplicationEntityConfiguration : IEntityTypeConfiguration<Applicati
         builder.Property(u => u.City).HasMaxLength(50);
         builder.Property(u => u.ZipCode).HasMaxLength(10);
         builder.Property(u => u.Role).HasMaxLength(50);
+        builder.Property(u => u.UnreadNotifications).HasMaxLength(3);
     }
 }

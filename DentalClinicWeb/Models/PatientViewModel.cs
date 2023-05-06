@@ -16,6 +16,7 @@ namespace DentalClinicWeb.Models
         public int DiscountThreshold { get; set; }
 
         public decimal DiscountPercentage { get; set; }
+        public int? UnreadNotifications { get; set; }
 
     }
 }

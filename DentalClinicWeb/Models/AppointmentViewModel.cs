@@ -8,7 +8,6 @@ namespace DentalClinicWeb.Models
     [Table("Appointments")]
     public class AppointmentViewModel
     {
-        [Key]
         public int Id { get; set; }
 
         public string PatientId { get; set; }

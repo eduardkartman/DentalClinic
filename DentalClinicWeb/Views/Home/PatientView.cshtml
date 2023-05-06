@@ -123,7 +123,15 @@
                             <ul>
                                 @foreach (var appointment in ViewBag.TodaysAppointments)
                                 {
-                                    <li>@appointment.TreatmentName - @appointment.AppointmentDateTime.ToString("MM/dd/yyyy h:mm tt")</li>
+
+                                    @if (@appointment.Status == AppointmentStatus.Pending)
+                                    {
+                                        <li>@appointment.TreatmentName - @appointment.AppointmentDateTime.ToString("MM/dd/yyyy h:mm tt") - Pending</li>
+                                    }
+                                    else
+                                    {
+                                        <li>@appointment.TreatmentName - @appointment.AppointmentDateTime.ToString("MM/dd/yyyy h:mm tt") - Accepted</li>
+                                    }
                                 }
                             </ul>
                         }
@@ -139,7 +147,15 @@
                             <ul>
                                 @foreach (var appointment in ViewBag.UpcomingAppointments)
                                 {
-                                    <li>@appointment.TreatmentName - @appointment.AppointmentDateTime.ToString("MM/dd/yyyy h:mm tt")</li>
+
+                                    @if (@appointment.Status == AppointmentStatus.Pending)
+                                    {
+                                        <li>@appointment.TreatmentName - @appointment.AppointmentDateTime.ToString("MM/dd/yyyy h:mm tt") - Pending</li>
+                                    }
+                                    else if (@appointment.Status == AppointmentStatus.Accepted)
+                                    {
+                                        <li>@appointment.TreatmentName - @appointment.AppointmentDateTime.ToString("MM/dd/yyyy h:mm tt") - Accepted</li>
+                                    }
                                 }
                             </ul>
                         }

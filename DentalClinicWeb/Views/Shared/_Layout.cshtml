@@ -7,6 +7,14 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DentalClinicWeb.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.1/css/bootstrap.min.css" integrity="sha512-Xa1jrHrGwkkkMQFh1f6UxV6E3PCB4gbv2UzJlD0gZp8DFWU1vRiUKFBPTx1y7zbXLPW5nk5o5xdLsybGZ7+1Cg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-3deCvXanNt+H2N/sOwZfT/sJ3anFVffkDzo9FyPPLTRyXpJlLAKR1bKriTvu+7Z3J6eYhNdQ+CoGjxjn2akX9Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.1/js/bootstrap.bundle.min.js" integrity="sha512-Vu8W/yID5EzJg6OxU6lmN8W+h4OQvMFrRuJZtdyzM8pW/1S6vcaNx+5KKVfD34ATXj7MYug5RVzAnM7VQZj+Ww==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link href="~/notification/ikr.notification.css" rel="stylesheet" />
+
 </head>
 
 <body>
@@ -32,13 +40,13 @@
                                 <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/ManageUsers">Manage Users</a>
                             </li>
                         }
-                        @if (User.IsInRole("Patient"))
+                        else if (User.IsInRole("Patient"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="PatientView">Account</a>
                             </li>
                         }
-                        @if (User.IsInRole("Doctor"))
+                        else if (User.IsInRole("Doctor"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="DoctorView">Account</a>
@@ -64,6 +72,22 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/notification/ikr.notificationplugin.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/notificationHub")
+            .build();
+
+        connection.start();
+
+        connection.on("ReceiveNotification", function (message) {
+            console.log(message);
+        });
+    </script>
+
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

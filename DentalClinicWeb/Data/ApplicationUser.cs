@@ -19,6 +19,7 @@ namespace DentalClinicWeb.Data
 
         public string? Role { get; set; }
 
+        public int? UnreadNotifications { get; set; }
 
     }
 }

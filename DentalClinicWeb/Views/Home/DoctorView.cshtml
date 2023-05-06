@@ -90,7 +90,12 @@
                             <ul>
                                 @foreach (var appointment in ViewBag.TodaysAppointments)
                                 {
-                                    @if (appointment.Status == DentalClinicWeb.Models.AppointmentStatus.Pending)
+
+                                    @if (@appointment.Status == AppointmentStatus.Pending)
+                                    {
+                                        <li>@appointment.TreatmentName - @appointment.AppointmentDateTime.ToString("MM/dd/yyyy h:mm tt") - Request Action</li>
+                                    }
+                                    else
                                     {
                                         <li>@appointment.TreatmentName - @appointment.AppointmentDateTime.ToString("MM/dd/yyyy h:mm tt")</li>
                                     }
@@ -100,7 +105,7 @@
                     </div>
                     <div class="rounded-frame p-2 frame">
                         <h2>Upcoming Appointments</h2>
-                        @if (ViewBag.UpcomingAppointments.Count == 0 || ViewBag.Status == DentalClinicWeb.Models.AppointmentStatus.Cancelled)
+                        @if (ViewBag.UpcomingAppointments.Count == 0)
                         {
                             <p>No upcoming appointments.</p>
                         }
@@ -109,11 +114,15 @@
                             <ul>
                                 @foreach (var appointment in ViewBag.UpcomingAppointments)
                                 {
-                                    @if (appointment.Status == DentalClinicWeb.Models.AppointmentStatus.Pending)
+
+                                    @if (@appointment.Status == AppointmentStatus.Accepted)
                                     {
                                         <li>@appointment.TreatmentName - @appointment.AppointmentDateTime.ToString("MM/dd/yyyy h:mm tt")</li>
                                     }
-
+                                    else if (@appointment.Status == AppointmentStatus.Pending)
+                                    {
+                                        <li>@appointment.TreatmentName - @appointment.AppointmentDateTime.ToString("MM/dd/yyyy h:mm tt") - Request Action</li>
+                                    }
                                 }
                             </ul>
                         }
