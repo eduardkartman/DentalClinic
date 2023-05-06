@@ -88,10 +88,18 @@
                         {
                             <a class="dropdown-item" href="/Notifications/Index">View all past notifications</a>
                         }
+                        @if(numberNewNotifications == 0 && numberPastNotifications == 0)
+                        {
+                            <a class="dropdown-item">
+                                <h6 class="mb-1">No notofication to show.</h6>
+                            </a>
+                        }
                     }
                     else
                     {
-                        <a class="dropdown-item" href="#">No notifications to show</a>
+                        <a class="dropdown-item">
+                            <h6 class="mb-1">No notofication to show.</h6>
+                        </a>
                     }
                     <script>
                         document.addEventListener("DOMContentLoaded", function () {
