@@ -21,6 +21,7 @@ namespace DentalClinicWeb.Models
         public string DoctorName { get; set;}
         public string DoctorEmail { get; set;}
         public string DoctorPhoneNumber { get; set;}
+        public string? DoctorConclusion { get; set; }
 
         [ForeignKey("DoctorId")]
         public DoctorViewModel Doctors { get; set; }

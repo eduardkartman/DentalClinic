@@ -35,17 +35,9 @@
                         <a class="nav-link" asp-area="Identity" asp-page="/Account/Treatments/Visit">Treatments</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="users"></span>
-                            Patients
-                        </a>
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Users/Patients">Reports</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="bar-chart-2"></span>
-                            Reports
-                        </a>
-                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <span data-feather="layers"></span>
@@ -74,8 +66,19 @@
             </div>
             <!-- Account Details -->
             <div class="row">
-
+                <!-- Patient List -->
                 <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Patient List</h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- Add your patient list content here -->
+                            <ul id="patientList">
+                                <li>No patients found.</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
                 <!-- Appointment Summary -->
                 <div class="col-md-6">

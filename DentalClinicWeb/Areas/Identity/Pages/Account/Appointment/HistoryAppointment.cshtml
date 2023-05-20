@@ -39,16 +39,7 @@
                         <a class="nav-link" asp-area="Identity" asp-page="/Account/Treatments/Visit">Treatments</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="users"></span>
-                            Patients
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="bar-chart-2"></span>
-                            Reports
-                        </a>
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Users/Patients">Reports</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
@@ -74,6 +65,7 @@
                                 <th>Date</th>
                                 <th>Treatment</th>
                                 <th>Status</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -84,6 +76,9 @@
                                     <td>@appointment.AppointmentDateTime.ToString("MM/dd/yyyy h:mm tt")</td>
                                     <td>@appointment.Treatment.Name</td>
                                     <td>@appointment.Status.ToString()</td>
+                                    <td>
+                                        <a class="btn btn-primary" href="/CompleteApp?id=@appointment.Id">Complete</a>
+                                    </td>
                                 </tr>
                             }
                         </tbody>

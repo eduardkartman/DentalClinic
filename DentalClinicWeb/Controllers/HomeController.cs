@@ -29,7 +29,7 @@ namespace DentalClinicWeb.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Patient")]
+        [Authorize(Roles = "Patient,Admin")]
         public async Task<IActionResult> PatientView()
         {
             var user = _userManager.GetUserAsync(User).Result;

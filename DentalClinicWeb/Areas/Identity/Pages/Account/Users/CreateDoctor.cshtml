@@ -1,41 +1,71 @@
 ﻿@page
-@using DentalClinicWeb.Areas.Identity.Pages.Account.Users
-@model CreateDoctorModel
+@using DentalClinicWeb.Areas.Identity.Pages.Account
+@model RegisterModel
 
-<div class="container mt-5">
-    <h2>Add New Doctor</h2>
+<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" style="width: 400px; background-color: #FFFFFF; padding: 30px; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        <h2 class="text-center mb-4" style="font-weight: bold; color: #444444;">Create a new doctor</h2>
+        <hr style="margin: 20px 0; border: none; border-bottom: 1px solid #EEEEEE;">
+        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+        <div class="form-floating mb-3">
+            <input asp-for="Input.FirstName" class="form-control" aria-required="true" placeholder="password" style="border-radius: 3px; border: none; box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);">
+            <label asp-for="Input.FirstName" style="color: #777777;">First Name</label>
+            <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Input.LastName" class="form-control" aria-required="true" placeholder="password" style="border-radius: 3px; border: none; box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);">
+            <label asp-for="Input.LastName" style="color: #777777;">Last Name</label>
+            <span asp-validation-for="Input.LastName" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" style="border-radius: 3px; border: none; box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);">
+            <label asp-for="Input.Email" style="color: #777777;">Email</label>
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" style="border-radius: 3px; border: none; box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);">
+            <label asp-for="Input.Password" style="color: #777777;">Password</label>
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+        </div>
 
-    <form method="post">
-        <div class="form-group">
-            <label asp-for="Doctors.Email" class="control-label">Doctor's email'</label>
-            <input asp-for="Doctors.Email" class="form-control" required />
+        <div class="form-floating mb-3">
+            <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" style="border-radius: 3px; border: none; box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);">
+            <label asp-for="Input.ConfirmPassword" style="color: #777777;">Confirm Password</label>
+            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Input.PhoneNumber" class="form-control" aria-required="true" placeholder="phonenumber" style="border-radius: 3px; border: none; box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);">
+            <label asp-for="Input.PhoneNumber" style="color: #777777;">Mobile Number</label>
+            <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Input.Country" class="form-control" aria-required="false" placeholder="country" style="border-radius: 3px; border: none; box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);">
+            <label asp-for="Input.Country" style="color: #777777;">Country</label>
+            <span asp-validation-for="Input.Country" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Input.City" class="form-control" aria-required="false" placeholder="city" style="border-radius: 3px; border: none; box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);">
+            <label asp-for="Input.City" style="color: #777777;">City</label>
+            <span asp-validation-for="Input.City" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Input.ZipCode" class="form-control" aria-required="false" placeholder="zipcode" style="border-radius: 3px; border: none; box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);">
+            <label asp-for="Input.ZipCode" style="color: #777777;">ZIP Code</label>
+            <span asp-validation-for="Input.ZipCode" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Doctors.FirstName" class="control-label">Doctor's first name'</label>
-            <input asp-for="Doctors.FirstName" class="form-control" required />
-        </div>
-        <div class="form-group">
-            <label asp-for="Doctors.LastName" class="control-label">Doctor's last name'</label>
-            <input asp-for="Doctors.LastName" class="form-control" required />
-        </div>
-        <div class="form-group">
-            <label asp-for="Doctors.PhoneNumber" class="control-label">Doctor's phone number'</label>
-            <input asp-for="Doctors.PhoneNumber" class="form-control" />
-        </div>
-        <div class="form-group">
-            <label asp-for="Doctors.Country" class="control-label">Country</label>
-            <input asp-for="Doctors.Country" class="form-control" />
-        </div>
-        <div class="form-group">
-            <label asp-for="Doctors.City" class="control-label">City</label>
-            <input asp-for="Doctors.City" class="form-control" />
-        </div>
-        <div class="form-group">
-            <label asp-for="Doctors.ZipCode" class="control-label">ZIP Code</label>
-            <input asp-for="Doctors.ZipCode" class="form-control" />
+            <label asp-for="Input.Role"></label>
+            <select asp-for="Input.Role" class="form-control">
+                <option value="Doctor">Doctor</option>
+            </select>
         </div>
         <br />
-        <button type="submit" class="btn btn-primary">Create</button>
-        <a asp-area="Identity" asp-page="/Account/Users/ManageUsers" class="btn btn-secondary">Cancel</a>
+
+        <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary" style="border-radius: 3px; background-color:#34a8eb; border: none; font-weight: bold;">Create Doctor</button>
     </form>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
