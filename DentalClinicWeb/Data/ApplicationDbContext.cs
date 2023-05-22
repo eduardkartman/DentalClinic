@@ -16,6 +16,7 @@ namespace DentalClinicWeb.Data
         public DbSet<TreatmentsViewModel> Treatments { get; set; }
         public DbSet<AppointmentViewModel> Appointments { get; set; }
         public DbSet<NotificationModel> Notifications { get; set; }
+        public DbSet<SMS> SMS { get; set; }
 
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)

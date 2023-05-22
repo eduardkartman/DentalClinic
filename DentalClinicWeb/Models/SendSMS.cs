@@ -8,42 +8,41 @@ namespace DentalClinicWeb.Models
 {
     public class SendSMS
     {
-        public static SerialPort sPort = new SerialPort(
+       /* public static SerialPort sPort = new SerialPort( 
             ConfigurationSettings.AppSettings["COM3"],
             int.Parse(ConfigurationSettings.AppSettings["9600"]),
             Parity.None,
             int.Parse(ConfigurationSettings.AppSettings["8"]),
-            StopBits.One);
+            StopBits.One);*/
 
         public static bool sendSMS(string phoneNumber, string message)
         {
-
             bool result = true;
 
             String modemResponse = "";
-            try
+            var sPort = new SerialPort("COM3", 115200);
+            // deschide portul serial
+            if (!sPort.IsOpen)
             {
-                // deschide portul serial
-                if (!sPort.IsOpen)
-                {
-                    sPort.NewLine = Environment.NewLine;
-                    sPort.Handshake = Handshake.None;
-                    sPort.RtsEnable = true;
-                    sPort.Encoding = Encoding.ASCII;
-                    //sPort.WriteBufferSize = 8192;
-                    sPort.Open();
-                }
+                sPort.NewLine = Environment.NewLine;
+                sPort.Handshake = Handshake.None;
+                sPort.RtsEnable = true;
+                sPort.Encoding = Encoding.ASCII;
+                //sPort.WriteBufferSize = 8192;
+                sPort.Open();
+            }
 
-                // verificare daca modemul gsm este conectat la retea
-                sPort.DiscardInBuffer();
+
+            // verificare daca modemul gsm este conectat la retea
+            sPort.DiscardInBuffer();
                 sPort.DiscardOutBuffer();
 
-                Thread.Sleep(1000);
+                Thread.Sleep(5000);
 
                 modemResponse = sPort.ReadExisting();
 
                 sPort.WriteLine("AT+CREG?");
-                System.Threading.Thread.Sleep(1000);
+                System.Threading.Thread.Sleep(2000);
                 modemResponse = sPort.ReadExisting();
 
                 // raspunsul trebuie sa fie de forma: AT+CREG?\r\r\n+CREG: 0,0\r\n\r\nOK\r\n
@@ -58,7 +57,7 @@ namespace DentalClinicWeb.Models
                     // modemul nu este conectat la retea
                     if ((nStat != 1) && (nStat != 5))
                     {
-                        if (ConfigurationSettings.AppSettings["modemPIN"].Length > 0)
+                        /*if (ConfigurationSettings.AppSettings["modemPIN"].Length > 0)
                         {
                             // trimite comanda de introducere a pin-ului
                             sPort.DiscardInBuffer();
@@ -73,13 +72,8 @@ namespace DentalClinicWeb.Models
                                 throw new Exception("PIN incorect");
                             }
                         }
-                        else
-                        {
-                            System.Threading.Thread.Sleep(3000); // be sure is registeres
-                        }
-                    }
-                    else
-                    {
+                        */
+                        System.Threading.Thread.Sleep(3000); // be sure is registeres
                     }
 
                     // modemul este conectat la retea
@@ -102,19 +96,14 @@ namespace DentalClinicWeb.Models
                         _b[0] = 0x1A; // Ctrl+Z - ascii code
                         sPort.Write(_b, 0, 1);
                         Thread.Sleep(4000);
-                        modemResponse = sPort.ReadExisting();
+                         modemResponse = sPort.ReadExisting();
                     }
                 }
                 else
                 {
                     throw new Exception("OK not found in the response from the gsm modem.");
                 }
-            }
-            catch (Exception ex)
-            {
-                result = false;
-            }
-
+            
             return result;
         }
     }

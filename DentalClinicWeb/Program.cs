@@ -3,14 +3,14 @@ using DentalClinicWeb.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-
+using Umbraco.Core.Composing.CompositionExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString), ServiceLifetime.Scoped);
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -24,9 +24,9 @@ builder.Services.AddRazorPages();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
-
+builder.Services.AddScoped<ApplicationDbContext>();
+builder.Services.AddScoped<smsSender>();
 var app = builder.Build();
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -58,6 +58,7 @@ app.MapHub<NotificationsHub>("/notificationsHub");
 using (var scope = app.Services.CreateScope())
 {
     await DbSeeder.SeedRolesAndAdminAsync(scope.ServiceProvider);
+    var smsSender = scope.ServiceProvider.GetRequiredService<smsSender>();
+    smsSender.StartSending();
 }
-
 app.Run();

@@ -75,9 +75,25 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                 var hubContext = _hubContext.Clients.User(appointment.DoctorId);
                 await hubContext.SendAsync("SendNotification", appointment.DoctorId, notification.Message);
 
+
+                var sms = new SMS
+                {
+                    PhoneNumber = $"+4{appointment.PatientPhoneNumber}",
+                    Message = $"We are happy to announce you that your appointment has been accepted by our doctor. Appointment's date: {appointment.AppointmentDateTime} - {appointment.EndAppointmentDateTime}",
+                    IsSent = false,
+                    CreatedAt = DateTime.Now,
+                };
+                // Add the sms to the database
+                await _context.SMS.AddAsync(sms);
+
                 await _context.SaveChangesAsync();
+
+                SendSMS.sendSMS(sms.PhoneNumber, sms.Message);
+
             }
-            else if (status == "Cancelled")
+
+            else 
+                if (status == "Cancelled")
             {
                 appointment.Status = AppointmentStatus.Cancelled;
                 _context.Appointments.Update(appointment);
@@ -99,7 +115,19 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                 var hubContext = _hubContext.Clients.User(appointment.DoctorId);
                 await hubContext.SendAsync("SendNotification", appointment.DoctorId, notification.Message);
 
+                var sms = new SMS
+                {
+                    PhoneNumber = $"+4{appointment.PatientPhoneNumber}",
+                    Message = $"Unfortunately your appointment has been cancelled by our doctor. We recommend you to reschedule.",
+                    IsSent = false,
+                    CreatedAt = DateTime.Now,
+                };
+                // Add the sms to the database
+                await _context.SMS.AddAsync(sms);
+
                 await _context.SaveChangesAsync();
+                
+                SendSMS.sendSMS(sms.PhoneNumber, sms.Message);
             }
 
             return RedirectToPage();

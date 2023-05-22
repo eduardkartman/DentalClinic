@@ -22,17 +22,19 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHubContext<NotificationsHub> _hubContext;
+        private readonly smsSender _smsSender;
 
         public IList<TreatmentsViewModel> Treatments { get; set; }
         public IList<DoctorViewModel> Doctors { get; set; }
 
-        public AppointmentModel(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IHubContext<NotificationsHub> hubContext)
+        public AppointmentModel(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IHubContext<NotificationsHub> hubContext, smsSender smsSender)
         {
             _context = context;
             _userManager = userManager;
             Treatments = new List<TreatmentsViewModel>();
             Doctors = new List<DoctorViewModel>();
             _hubContext = hubContext;
+            _smsSender = smsSender;
         }
 
         [BindProperty]
@@ -143,7 +145,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
 
 
                         int gapDuration = gapsInMinutes[i];
-                        if (gapDuration > treatment.DurationInMinutes && startingAppointmentDateTime > gapStart && endAppointmentDateTime < gapEnd && gapEnd > startingAppointmentDateTime)
+                        if (gapDuration > treatment.DurationInMinutes && startingAppointmentDateTime > gapStart && endAppointmentDateTime <= gapEnd)
                         {
                             // Use the exact gap that matches the selected starting and ending time
                             var appointment = new AppointmentViewModel
@@ -186,10 +188,24 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                             var hubContext = _hubContext.Clients.User(appointment.DoctorId);
                             await hubContext.SendAsync("SendNotification", appointment.DoctorId, notification.Message);
 
+
+                            var sms = new SMS
+                            {
+                                PhoneNumber = $"+4{appointment.PatientPhoneNumber}",
+                                Message = $"Thank you for choosing us! Your appointment has been created. Appointment: {appointment.AppointmentDateTime} - {appointment.EndAppointmentDateTime}",
+                                IsSent = false,
+                                CreatedAt = DateTime.Now,
+                            };
+                            // Add the sms to the database
+                            await _context.SMS.AddAsync(sms);
+
                             await _context.SaveChangesAsync();
+
+                            SendSMS.sendSMS(sms.PhoneNumber, sms.Message);
+                            
                             return Page();
                         }
-                        else if (gapDuration > treatment.DurationInMinutes)
+                        else if (gapDuration > treatment.DurationInMinutes && gapEnd > endAppointmentDateTime)
                         {
                             // Recommend the available gap
                             string recommendedTime = $"{gapStart.AddMinutes(5).ToString("hh:mm tt")} - {gapEnd.AddMinutes(-5).ToString("hh:mm tt")}";
@@ -243,7 +259,19 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                 // Send the notification to the doctor using SignalR
                 var hubContext = _hubContext.Clients.User(appointment.DoctorId);
                 await hubContext.SendAsync("SendNotification", appointment.DoctorId, notification.Message);
+
+                var sms = new SMS
+                {
+                    PhoneNumber = $"+4{appointment.PatientPhoneNumber}",
+                    Message = $"Thank you for choosing us! Your appointment has been created. Appointment: {appointment.AppointmentDateTime} - {appointment.EndAppointmentDateTime}",
+                    IsSent = false,
+                    CreatedAt = DateTime.Now,
+                };
+                // Add the sms to the database
+                await _context.SMS.AddAsync(sms);
                 await _context.SaveChangesAsync();
+
+                SendSMS.sendSMS(sms.PhoneNumber, sms.Message);
                 return Page();
 
             }
