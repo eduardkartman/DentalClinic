@@ -1,4 +1,5 @@
-﻿using DentalClinicWeb.Data;
+﻿/*
+using DentalClinicWeb.Data;
 
 namespace DentalClinicWeb.Models
 {
@@ -58,3 +59,6 @@ namespace DentalClinicWeb.Models
         }
     }
 }
+
+
+*/

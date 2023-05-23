@@ -89,6 +89,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                 await _context.SaveChangesAsync();
 
                 SendSMS.sendSMS(sms.PhoneNumber, sms.Message);
+                return RedirectToPage();
 
             }
 
@@ -128,6 +129,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                 await _context.SaveChangesAsync();
                 
                 SendSMS.sendSMS(sms.PhoneNumber, sms.Message);
+                return RedirectToPage();
             }
 
             return RedirectToPage();

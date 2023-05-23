@@ -22,19 +22,18 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHubContext<NotificationsHub> _hubContext;
-        private readonly smsSender _smsSender;
+        //private readonly smsSender _smsSender;
 
         public IList<TreatmentsViewModel> Treatments { get; set; }
         public IList<DoctorViewModel> Doctors { get; set; }
 
-        public AppointmentModel(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IHubContext<NotificationsHub> hubContext, smsSender smsSender)
+        public AppointmentModel(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IHubContext<NotificationsHub> hubContext)
         {
             _context = context;
             _userManager = userManager;
             Treatments = new List<TreatmentsViewModel>();
             Doctors = new List<DoctorViewModel>();
             _hubContext = hubContext;
-            _smsSender = smsSender;
         }
 
         [BindProperty]
@@ -202,7 +201,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                             await _context.SaveChangesAsync();
 
                             SendSMS.sendSMS(sms.PhoneNumber, sms.Message);
-                            
+
                             return Page();
                         }
                         else if (gapDuration > treatment.DurationInMinutes && gapEnd > endAppointmentDateTime)

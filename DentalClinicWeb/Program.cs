@@ -25,7 +25,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
 builder.Services.AddScoped<ApplicationDbContext>();
-builder.Services.AddScoped<smsSender>();
+//builder.Services.AddScoped<smsSender>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -58,7 +58,7 @@ app.MapHub<NotificationsHub>("/notificationsHub");
 using (var scope = app.Services.CreateScope())
 {
     await DbSeeder.SeedRolesAndAdminAsync(scope.ServiceProvider);
-    var smsSender = scope.ServiceProvider.GetRequiredService<smsSender>();
-    smsSender.StartSending();
+   // var smsSender = scope.ServiceProvider.GetRequiredService<smsSender>();
+   // smsSender.StartSending();
 }
 app.Run();

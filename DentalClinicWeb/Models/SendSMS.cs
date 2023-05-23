@@ -8,13 +8,6 @@ namespace DentalClinicWeb.Models
 {
     public class SendSMS
     {
-       /* public static SerialPort sPort = new SerialPort( 
-            ConfigurationSettings.AppSettings["COM3"],
-            int.Parse(ConfigurationSettings.AppSettings["9600"]),
-            Parity.None,
-            int.Parse(ConfigurationSettings.AppSettings["8"]),
-            StopBits.One);*/
-
         public static bool sendSMS(string phoneNumber, string message)
         {
             bool result = true;
@@ -24,12 +17,14 @@ namespace DentalClinicWeb.Models
             // deschide portul serial
             if (!sPort.IsOpen)
             {
+                
                 sPort.NewLine = Environment.NewLine;
                 sPort.Handshake = Handshake.None;
                 sPort.RtsEnable = true;
                 sPort.Encoding = Encoding.ASCII;
-                //sPort.WriteBufferSize = 8192;
+                sPort.WriteBufferSize = 8192;
                 sPort.Open();
+               
             }
 
 
@@ -96,7 +91,7 @@ namespace DentalClinicWeb.Models
                         _b[0] = 0x1A; // Ctrl+Z - ascii code
                         sPort.Write(_b, 0, 1);
                         Thread.Sleep(4000);
-                         modemResponse = sPort.ReadExisting();
+                        modemResponse = sPort.ReadExisting();
                     }
                 }
                 else
