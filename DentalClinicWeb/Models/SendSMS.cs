@@ -8,12 +8,13 @@ namespace DentalClinicWeb.Models
 {
     public class SendSMS
     {
+        public static SerialPort sPort = new SerialPort("COM3", 115200);
         public static bool sendSMS(string phoneNumber, string message)
         {
             bool result = true;
 
             String modemResponse = "";
-            var sPort = new SerialPort("COM3", 115200);
+           // var sPort = new SerialPort("COM3", 115200);
             // deschide portul serial
             if (!sPort.IsOpen)
             {
