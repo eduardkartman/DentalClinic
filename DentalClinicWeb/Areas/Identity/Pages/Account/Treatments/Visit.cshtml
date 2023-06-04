@@ -2,7 +2,7 @@
 @using DentalClinicWeb.Areas.Identity.Pages.Account.Treatments
 @model VisitModel
 @{
-    ViewData["Title"] = "Treatments";
+    ViewData["Title"] = "Tratamente";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <br />
@@ -16,33 +16,34 @@
                     @if (User.IsInRole("Patient") || User.IsInRole("Admin"))
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="PatientView">Dashboard</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="PatientView">Panou Principal</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/Appointment">Appointments</a>
+                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/Appointment">Programări</a>
                         </li>
                     }
 
                     @if (User.IsInRole("Doctor"))
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="DoctorView">Dashboard</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="DoctorView">Panou Principal</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/DoctorAppointment">Manage Appointments</a>
+                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/DoctorAppointment">Gestionați Programările</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/HistoryAppointment">Appointments</a>
+                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/HistoryAppointment">Programări</a>
                         </li>
                     }
 
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Treatments/Visit">Treatments</a>
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Treatments/Visit">Tratamente</a>
                     </li>
+
                     @if (User.IsInRole("Doctor"))
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Users/Patients">Reports</a>
+                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Users/Patients">Repoarte</a>
                         </li>
                     }
 
@@ -58,25 +59,22 @@
         <!-- Main Content -->
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Treatments</h1>
-
+                <h2>Tratamente</h2>
             </div>
             @if (User.IsInRole("Admin"))
             {
                 <div class="col-md-12 mb-4">
-                    <a asp-area="Identity" asp-page="/Account/Treatments/CreateVisit" class="btn btn-primary">Create New Treatment</a>
+                    <a asp-area="Identity" asp-page="/Account/Treatments/CreateVisit" class="btn btn-primary" style="background-color: #34a8eb">Adaugă un Tratament Nou</a>
                 </div>
             }
-
             <div class="col-md-12">
-                <h3>Treatments Summary</h3>
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Treatment</th>
-                            <th>Description</th>
-                            <th>Cost ($) </th>
-                            <th>Duration (min)</th>
+                            <th>Tratament</th>
+                            <th>Descriere</th>
+                            <th>Preț ($) </th>
+                            <th>Durata (în minute)</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -92,9 +90,9 @@
                                     @if (User.IsInRole("Admin"))
                                     {
                                         <div class="btn-group" role="group">
-                                            <a class="btn btn-outline-secondary" asp-area="Identity" asp-page="/Account/Treatments/EditVisit" asp-route-id="@visit.Id"><i class="fa fa-pencil"></i> Edit</a>
-                                            <form method="post" asp-page-handler="Delete" asp-route-id="@visit.Id" onsubmit="return confirm('Are you sure you want to delete this treatment?');">
-                                                <button type="submit" class="btn btn-outline-secondary"><i class="fa fa-trash"></i> Delete</button>
+                                            <a class="btn btn-outline-secondary" asp-area="Identity" asp-page="/Account/Treatments/EditVisit" asp-route-id="@visit.Id"><i class="fa fa-pencil"></i> Editează</a>
+                                            <form method="post" asp-page-handler="Delete" asp-route-id="@visit.Id" onsubmit="return confirm('Sunteți sigur că doriți să ștergeți acest tratament?');">
+                                                <button type="submit" class="btn btn-outline-secondary"><i class="fa fa-trash"></i> Șterge</button>
                                             </form>
                                         </div>
                                     }

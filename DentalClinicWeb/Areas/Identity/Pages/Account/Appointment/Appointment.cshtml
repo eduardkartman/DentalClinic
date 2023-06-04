@@ -33,24 +33,24 @@
             <div class="sidebar-sticky">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="PatientView">Dashboard</a>
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="PatientView">Panou Principal</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/Appointment">Appointments</a>
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/Appointment">Programări</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Treatments/Visit">Treatments</a>
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Treatments/Visit">Tratamente</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <span data-feather="users"></span>
-                            Patients
+                            Pacienti
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <span data-feather="bar-chart-2"></span>
-                            Reports
+                            Rapoarte
                         </a>
                     </li>
                     <li class="nav-item">
@@ -65,19 +65,19 @@
         <!-- Main Content -->
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Create An Appointment</h1>
+                <h1 class="h2">Crează o Programare</h1>
             </div>
             <form method="post">
                 <!-- Doctors table -->
                 <!-- Hidden input field to store selected doctor's ID -->
                 <div class="form-group">
-                    <h3>Select Doctor:</h3>
+                    <h3>Selectează Doctorul Dorit:</h3>
                     <table id="doctors-table" class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Name</th>
+                                <th>Nume</th>
                                 <th>Email</th>
-                                <th>Phone Number</th>
+                                <th>Mobil</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -89,7 +89,7 @@
                                     <td>@doctor.Email</td>
                                     <td>@doctor.PhoneNumber</td>
                                     <td>
-                                        <button type="button" class="selectDoctorButton" data-doctor-id="@doctor.Id">Select</button>
+                                        <button type="button" class="selectDoctorButton" data-doctor-id="@doctor.Id" style="background-color: #34a8eb">Selectează</button>
                                         <input asp-for="Appointment.DoctorId" type="hidden" id="doctorId" />
                                     </td>
                                 </tr>
@@ -97,16 +97,18 @@
                         </tbody>
                     </table>
                 </div>
+                <br/>
+                <br/>
                 <!-- Treatments table -->
                 <div class="form-group">
-                    <h3>Select Treatment:</h3>
+                    <h3>Selectează Tratamentul Dorit:</h3>
                     <table id="treatments-table" class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Price ($)</th>
-                                <th>Description</th>
-                                <th>Duration (min)</th>
+                                <th>Nume</th>
+                                <th>Preț ($)</th>
+                                <th>Descriere</th>
+                                <th>Durată (în minute)</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -119,7 +121,7 @@
                                     <td>@treatment.Description</td>
                                     <td>@treatment.DurationInMinutes</td>
                                     <td>
-                                        <button type="button" class="selectTreatmentButton" data-treatment-id="@treatment.Id">Select</button>
+                                        <button type="button" class="selectTreatmentButton" data-treatment-id="@treatment.Id" style="background-color: #34a8eb">Selectează</button>
                                         <input asp-for="Appointment.TreatmentId" type="hidden" id="treatmentId" />
 
                                     </td>
@@ -132,7 +134,7 @@
                 <br />
                 <!-- Calendar -->
                 <div class="form-group">
-                    <label for="datetime-picker">Select a Date and Time:</label>
+                    <label for="datetime-picker">Selectează Data și Ora:</label>
                     <div class="input-group date" id="datetime-picker" data-target-input="nearest">
                         <input asp-for="DateTime" type="datetime-local" class="form-control" />
                         <div class="input-group-append" data-target="#datetime-picker" data-toggle="datetimepicker">
@@ -141,7 +143,7 @@
                     </div>
                 </div>
                 <br />
-                <button id="submitBtn" type="submit" class="btn btn-primary">Submit</button>
+                <button id="submitBtn" type="submit" class="btn btn-primary" style="background-color: #34a8eb">Efectuează</button>
             </form>
         </main>
     </div>
@@ -211,19 +213,19 @@
             $('#submitBtn').on('click', function () {
                 var doctorId = $('#doctorId').val();
                 if (!doctorId) {
-                    alert('Please select a doctor.');
+                    alert('Te rugăm să selectezi un doctor.');
                     return false;
                 }
 
                 var treatmentId = $('#treatmentId').val();
                 if (!treatmentId) {
-                    alert('Please select a treatment.');
+                    alert('Te rugăm să selectezi un tratament.');
                     return false;
                 }
 
                 // Check if a date is selected
                 if (!$('#DateTime').val()) {
-                    alert('Please select a date.');
+                    alert('Te rugăm să selectezi o dată și o oră.');
                     return false;
                 }
             });

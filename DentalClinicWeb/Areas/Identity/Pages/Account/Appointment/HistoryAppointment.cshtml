@@ -2,7 +2,7 @@
 @model DentalClinicWeb.Areas.Identity.Pages.Account.Appointment.HistoryAppointmentsModel
 
 @{
-    ViewData["Title"] = "Manage Appointments";
+    ViewData["Title"] = "Programări";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -26,20 +26,20 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="@Url.Action("DoctorView", "Home")">
                             <span data-feather="home"></span>
-                            Dashboard <span class="sr-only"></span>
+                            Panou Principal <span class="sr-only"></span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/DoctorAppointment">Manage Appointments</a>
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/DoctorAppointment">Gestionează Programările</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/HistoryAppointment">Appointments</a>
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/HistoryAppointment">Programări</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Treatments/Visit">Treatments</a>
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Treatments/Visit">Tratamente</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Users/Patients">Reports</a>
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Users/Patients">Rapoarte</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
@@ -53,17 +53,17 @@
         <!-- Main Content -->
         <main role="main" class="col-md-8 ml-sm-auto col-lg-10 px-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Appointments History</h1>
+                <h1>Arhiva Programărilor</h1>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <h2>Accepted Appointments</h2>
+                    <h3>Programări Acceptate</h3>
                     <table class="table table-striped table-sm mb-5">
                         <thead>
                             <tr>
-                                <th>Patient</th>
-                                <th>Date</th>
-                                <th>Treatment</th>
+                                <th>Pacient</th>
+                                <th>Data</th>
+                                <th>Tratamentul</th>
                                 <th>Status</th>
                                 <th></th>
                             </tr>
@@ -87,13 +87,13 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <h2>Declined Appointments</h2>
+                    <h3>Programări Refuzate</h3>
                     <table class="table table-striped table-sm mb-5">
                         <thead>
                             <tr>
-                                <th>Patient</th>
-                                <th>Date</th>
-                                <th>Treatment</th>
+                                <th>Pacient</th>
+                                <th>Data</th>
+                                <th>Tratament</th>
                                 <th>Status</th>
                             </tr>
                         </thead>

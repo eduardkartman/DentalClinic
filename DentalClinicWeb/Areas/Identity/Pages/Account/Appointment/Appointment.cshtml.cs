@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -79,7 +79,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
             // Verify that the appointment time falls between 9 AM and 6 PM
             if (startingAppointmentDateTime.TimeOfDay < openingTime.TimeOfDay || endAppointmentDateTime.TimeOfDay > closingTime.TimeOfDay)
             {
-                ModelState.AddModelError(string.Empty, "The selected appointment time is outside the working hours (9AM-6PM). Please choose another time.");
+                ModelState.AddModelError(string.Empty, "Ora de programare selectată este în afara programului de lucru (9:00-18:00). Vă rugăm să alegeți altă dată.");
                 Doctors = await _context.Doctors.ToListAsync();
                 Treatments = await _context.Treatments.ToListAsync();
                 return Page();
@@ -95,7 +95,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
 
             if (appointmentsForDoctor.Count >= 5)
             {
-                ModelState.AddModelError(string.Empty, $"The selected doctor already has reached the maximum appointments number for the selected day. Please choose another doctor or another date.");
+                ModelState.AddModelError(string.Empty, $"Doctorul selectat a atins deja numărul maxim de programări pentru ziua selectată. Vă rugăm să alegeți alt medic sau altă dată.");
                 Doctors = await _context.Doctors.ToListAsync();
                 Treatments = await _context.Treatments.ToListAsync();
                 return Page();
@@ -167,14 +167,14 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                             };
 
                             _context.Appointments.Add(appointment);
-                            ModelState.AddModelError(string.Empty, "Your appointment has been saved succesfully!");
+                            ModelState.AddModelError(string.Empty, "Programarea ta a fost salvată cu succes!");
                             await _context.SaveChangesAsync();
 
                             // Create a new notification object
                             var notification = new NotificationModel
                             {
                                 AppointmentId = appointment.Id,
-                                Message = "You have a new appointment! Click here to see it.",
+                                Message = "Ai o programare nouă! Click aici pentru a o vedea.",
                                 ReceiverId = appointment.DoctorId,
                                 SenderId = appointment.PatientId,
                                 CreatedAt = DateTime.Now
@@ -191,7 +191,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                             var sms = new SMS
                             {
                                 PhoneNumber = $"+4{appointment.PatientPhoneNumber}",
-                                Message = $"Thank you for choosing us! Your appointment has been created. Appointment: {appointment.AppointmentDateTime} - {appointment.EndAppointmentDateTime}",
+                                Message = $"Vă mulțumim că ne-ați ales! Programarea dvs. a fost creată cu succes! Programare: {appointment.AppointmentDateTime} - {appointment.EndAppointmentDateTime}",
                                 IsSent = false,
                                 CreatedAt = DateTime.Now,
                             };
@@ -208,7 +208,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                         {
                             // Recommend the available gap
                             string recommendedTime = $"{gapStart.AddMinutes(5).ToString("hh:mm tt")} - {gapEnd.AddMinutes(-5).ToString("hh:mm tt")}";
-                            ModelState.AddModelError(string.Empty, $"The selected treatment requires {treatment.DurationInMinutes} minutes. We recommend using the available gap between {recommendedTime}.");
+                            ModelState.AddModelError(string.Empty, $"Tratamentul selectat necesită {treatment.DurationInMinutes} minute. Vă recomandăm să utilizați intervalul disponibil între {recommendedTime}.");
                             Doctors = await _context.Doctors.ToListAsync();
                             Treatments = await _context.Treatments.ToListAsync();
                             return Page();
@@ -240,16 +240,17 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                 };
 
                 _context.Appointments.Add(appointment);
-                ModelState.AddModelError(string.Empty, "Your appointment has been saved succesfully!");
+                ModelState.AddModelError(string.Empty, "Programarea ta a fost salvată cu succes!");
                 await _context.SaveChangesAsync();
+
                 // Create a new notification object
                 var notification = new NotificationModel
                 {
                     AppointmentId = appointment.Id,
-                    Message = "You have a new appointment! Click here to see it.",
+                    Message = "Ai o programare nouă! Click aici pentru a o vedea.",
                     ReceiverId = appointment.DoctorId,
                     SenderId = appointment.PatientId,
-                    CreatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now
                 };
 
                 // Add the notification to the database
@@ -262,7 +263,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                 var sms = new SMS
                 {
                     PhoneNumber = $"+4{appointment.PatientPhoneNumber}",
-                    Message = $"Thank you for choosing us! Your appointment has been created. Appointment: {appointment.AppointmentDateTime} - {appointment.EndAppointmentDateTime}",
+                    Message = $"Vă mulțumim că ne-ați ales! Programarea dvs. a fost creată cu succes! Programare: {appointment.AppointmentDateTime} - {appointment.EndAppointmentDateTime}",
                     IsSent = false,
                     CreatedAt = DateTime.Now,
                 };
@@ -275,7 +276,8 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
 
             }
             // No available gaps were found
-            ModelState.AddModelError(string.Empty, $"The selected treatment requires {treatment.DurationInMinutes} minutes, but there are no available gaps today. Please choose another day.");
+            ModelState.AddModelError(string.Empty, $"Tratamentul selectat necesită {treatment.DurationInMinutes} minute, dar nu există intervale disponibile astăzi. Vă rugăm să alegeți o altă zi.");
+
             Doctors = await _context.Doctors.ToListAsync();
             Treatments = await _context.Treatments.ToListAsync();
             return Page();

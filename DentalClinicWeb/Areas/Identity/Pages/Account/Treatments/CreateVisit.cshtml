@@ -2,7 +2,7 @@
 @using DentalClinicWeb.Areas.Identity.Pages.Account.Treatments
 @model CreateVisitModel
 @{
-    ViewData["Title"] = "Create New Visit";
+    ViewData["Title"] = "Adaugă Tratament";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <br />
@@ -12,41 +12,47 @@
         <nav class="col-md-2 d-none d-md-block bg-light sidebar">
             <div class="sidebar-sticky">
                 <ul class="nav flex-column">
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="PatientView">Panou Principal</a>
+                        </li>
+                    }
                     @if (User.IsInRole("Patient"))
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="PatientView">Dashboard</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="PatientView">Panou Principal</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/Appointment">Appointments</a>
+                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/Appointment">Programări</a>
                         </li>
                     }
 
                     @if (User.IsInRole("Doctor"))
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="DoctorView">Dashboard</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="DoctorView">Panou Principal</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/DoctorAppointment">Appointments</a>
+                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/DoctorAppointment">Programări</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/ArchiveAppointment">Archived Appointments</a>
+                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/ArchiveAppointment">Gestionați Programările</a>
                         </li>
                     }
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Treatments/Visit">Treatments</a>
+                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Treatments/Visit">Tratamente</a>
                         </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <span data-feather="users"></span>
-                            Patients
+                            Pacienti
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <span data-feather="bar-chart-2"></span>
-                            Reports
+                            Rapoarte
                         </a>
                     </li>
                     <li class="nav-item">
@@ -61,23 +67,25 @@
         <!-- Main Content -->
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Create New Treatment</h1>
+                <h1 class="h2">Adaugă Tratament Nou</h1>
             </div>
 
             <form method="post">
                 <div class="form-group">
-                    <label asp-for="Treatments.Name" class="control-label">Treatment Name</label>
+                    <label asp-for="Treatments.Name" class="control-label">Numele Tratamentului</label>
                     <input asp-for="Treatments.Name" class="form-control" required />
                 </div>
+                <br />
                 <div class="form-group">
-                    <label asp-for="Treatments.Price" class="control-label">Price</label>
+                    <label asp-for="Treatments.Price" class="control-label">Preț</label>
                     <div class="input-group">
                         <span class="input-group-text">$</span>
                         <input asp-for="Treatments.Price" class="form-control" type="number" min="0" step="0.5" required />
                     </div>
                 </div>
+                <br />
                 <div class="form-group">
-                    <label asp-for="Treatments.DurationInMinutes" class="control-label">Time Estimated</label>
+                    <label asp-for="Treatments.DurationInMinutes" class="control-label">Timpul Estimat</label>
                     <div class="input-group">
                         <span class="input-group-text">min</span>
                         <input asp-for="Treatments.DurationInMinutes" class="form-control" type="number" min="0" required />
@@ -87,16 +95,16 @@
                 <br />
                 <div class="form-check">
                     <input asp-for="Treatments.IsAvailable" class="form-check-input" type="checkbox" value="true" />
-                    <label class="form-check-label">Is Available</label>
+                    <label class="form-check-label">Este Disponibil</label>
                 </div>
                 <br />
                 <div class="form-group">
-                    <label asp-for="Treatments.Description" class="control-label">Description</label>
+                    <label asp-for="Treatments.Description" class="control-label">Descriere</label>
                     <textarea asp-for="Treatments.Description" class="form-control" rows="5"></textarea>
                 </div>
                 <br />
-                <button type="submit" class="btn btn-primary">Create</button>
-                <a asp-area="Identity" asp-page="/Account/Treatments/Visit" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary" style="background-color: #34a8eb">Crează</button>
+                <a asp-area="Identity" asp-page="/Account/Treatments/Visit" class="btn btn-secondary">Anulează</a>
             </form>
 
 

@@ -1,4 +1,4 @@
-using DentalClinicWeb.Constans;
+﻿using DentalClinicWeb.Constans;
 using DentalClinicWeb.Data;
 using DentalClinicWeb.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -62,7 +62,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                 var notification = new NotificationModel
                 {
                     AppointmentId = appointmentId,
-                    Message = $"Your appointment has been accepted! {appointment.TreatmentName} - {appointment.AppointmentDateTime}",
+                    Message = $"Programarea dvs. a fost acceptată! {appointment.TreatmentName} - {appointment.AppointmentDateTime}",
                     ReceiverId = appointment.PatientId,
                     SenderId = appointment.DoctorId,
                     CreatedAt = DateTime.Now
@@ -79,7 +79,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                 var sms = new SMS
                 {
                     PhoneNumber = $"+4{appointment.PatientPhoneNumber}",
-                    Message = $"We are happy to announce you that your appointment has been accepted by our doctor. Appointment's date: {appointment.AppointmentDateTime} - {appointment.EndAppointmentDateTime}",
+                    Message = $"Ne bucurăm să vă anunțăm că programarea dvs. a fost acceptată de către medicul nostru. Data programării: {appointment.AppointmentDateTime} - {appointment.EndAppointmentDateTime}",
                     IsSent = false,
                     CreatedAt = DateTime.Now,
                 };
@@ -103,7 +103,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                 var notification = new NotificationModel
                 {
                     AppointmentId = appointmentId,
-                    Message = $"Your appointment has been cancelled! We recommend you to reschedule!",
+                    Message = "Programarea dvs. a fost anulată! Vă recomandăm să vă reprogramați!",
                     ReceiverId = appointment.PatientId,
                     SenderId = appointment.DoctorId,
                     CreatedAt = DateTime.Now
@@ -119,7 +119,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                 var sms = new SMS
                 {
                     PhoneNumber = $"+4{appointment.PatientPhoneNumber}",
-                    Message = $"Unfortunately your appointment has been cancelled by our doctor. We recommend you to reschedule.",
+                    Message = "Din păcate, programarea dumneavoastră, a fost anulată de medicul nostru.Vă recomandăm să vă reprogramați.",
                     IsSent = false,
                     CreatedAt = DateTime.Now,
                 };

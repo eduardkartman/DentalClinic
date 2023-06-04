@@ -230,6 +230,19 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
                     // Save changes to database
                     await _context.SaveChangesAsync();
 
+                    var sms = new SMS
+                    {
+                        PhoneNumber = $"+4{user.PhoneNumber}",
+                        Message = "Vă mulțumim că ne-ați ales! Contul dvs. a fost creat cu succes!",
+                        IsSent = false,
+                        CreatedAt = DateTime.Now,
+                    };
+                    // Add the sms to the database
+                    await _context.SMS.AddAsync(sms);
+                    await _context.SaveChangesAsync();
+
+                    SendSMS.sendSMS(sms.PhoneNumber, sms.Message);
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);

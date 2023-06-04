@@ -13,6 +13,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using System.IO;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
 
 namespace DentalClinicWeb.Areas.Identity.Pages.Account.Manage
 {
@@ -61,8 +64,32 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Manage
 
             personalData.Add($"Authenticator Key", await _userManager.GetAuthenticatorKeyAsync(user));
 
-            Response.Headers.Add("Content-Disposition", "attachment; filename=PersonalData.json");
-            return new FileContentResult(JsonSerializer.SerializeToUtf8Bytes(personalData), "application/json");
+            // Create a new PDF document
+            Document document = new Document();
+
+            // Create a new memory stream to write the PDF content
+            MemoryStream memoryStream = new MemoryStream();
+
+            // Create a PDF writer that writes to the memory stream
+            PdfWriter writer = PdfWriter.GetInstance(document, memoryStream);
+
+            // Open the document
+            document.Open();
+
+            // Add content to the PDF document
+            foreach (var entry in personalData)
+            {
+                document.Add(new Paragraph($"{entry.Key}: {entry.Value}"));
+            }
+
+            // Close the document
+            document.Close();
+
+            // Set the response headers to download the PDF file
+            Response.Headers.Add("Content-Disposition", "attachment; filename=PersonalData.pdf");
+
+            // Return the PDF file content as a FileContentResult
+            return new FileContentResult(memoryStream.ToArray(), "application/pdf");
         }
     }
 }

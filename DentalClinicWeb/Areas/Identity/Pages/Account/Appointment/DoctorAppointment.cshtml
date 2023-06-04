@@ -3,7 +3,7 @@
 @model DoctorAppointmentModel
 
 @{
-    ViewData["Title"] = "Manage Appointments";
+    ViewData["Title"] = "Gestionați Programările";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -27,20 +27,20 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="@Url.Action("DoctorView", "Home")">
                             <span data-feather="home"></span>
-                            Dashboard <span class="sr-only"></span>
+                            Panou Principal <span class="sr-only"></span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/DoctorAppointment">Manage Appointments</a>
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/DoctorAppointment">Gestionați Programările</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/HistoryAppointment">Appointments</a>
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/HistoryAppointment">Programări</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Treatments/Visit">Treatments</a>
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Treatments/Visit">Tratamente</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Users/Patients">Reports</a>
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Users/Patients">Rapoarte</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
@@ -54,15 +54,15 @@
         <!-- Main Content -->
         <main role="main" class="col-md-8 ml-sm-auto col-lg-10 px-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Manage Appointments</h1>
+                <h1 class="h2">Gestionați Programările</h1>
             </div>
             <div class="row">
                 <table class="table table-striped table-sm">
                     <thead>
                         <tr>
-                            <th>Patient Name</th>
-                            <th>Date</th>
-                            <th>Treatment</th>
+                            <th>Numele Pacientului</th>
+                            <th>Data</th>
+                            <th>Tratamentul</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -80,10 +80,10 @@
                                         <form method="post">
                                             <input type="hidden" name="appointmentId" value="@appointment.Id" />
                                             <select name="status" class="form-control">
-                                                <option value="Accepted">Accepted</option>
-                                                <option value="Cancelled">Declined</option>
+                                                <option value="Accepted">Acceptă</option>
+                                                <option value="Cancelled">Refuză</option>
                                             </select>
-                                            <button type="submit" class="btn btn-primary">Update</button>
+                                            <button type="submit" class="btn btn-primary" style="background-color: #34a8eb">Update</button>
                                         </form>
                                     }
                                 </td>

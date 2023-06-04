@@ -22,20 +22,20 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="@Url.Action("DoctorView", "Home")">
                             <span data-feather="home"></span>
-                            Dashboard <span class="sr-only"></span>
+                            Panou Principal <span class="sr-only"></span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/DoctorAppointment">Manage Appointments</a>
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/DoctorAppointment">Gestionați Programările</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/HistoryAppointment">Appointments</a>
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/HistoryAppointment">Programări</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Treatments/Visit">Treatments</a>
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Treatments/Visit">Tratamente</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Users/Patients">Reports</a>
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Users/Patients">Rapoarte</a>
                     </li>
 
                     <li class="nav-item">
@@ -54,13 +54,13 @@
                 <h1 class="h2">Dashboard</h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group mr-2">
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Day</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Week</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Month</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Ziua</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Săptămâna</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Luna</button>
                     </div>
                     <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
                         <span data-feather="calendar"></span>
-                        This week
+                        Această Săptămână
                     </button>
                 </div>
             </div>
@@ -70,12 +70,12 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title">Patient List</h5>
+                            <h5 class="card-title">Lista Pacienților</h5>
                         </div>
                         <div class="card-body">
                             <!-- Add your patient list content here -->
                             <ul id="patientList">
-                                <li>No patients found.</li>
+                                <li>Nu a fost găsit niciun pacient.</li>
                             </ul>
                         </div>
                     </div>
@@ -83,10 +83,10 @@
                 <!-- Appointment Summary -->
                 <div class="col-md-6">
                     <div class="rounded-frame p-2 frame">
-                        <h2>Today's Appointments</h2>
+                        <h2>Programările de Astăzi</h2>
                         @if (ViewBag.TodaysAppointments.Count == 0)
                         {
-                            <p>No appointments today.</p>
+                            <p>Nu aveți nicio programare în această zi.</p>
                         }
                         else
                         {
@@ -107,10 +107,10 @@
                         }
                     </div>
                     <div class="rounded-frame p-2 frame">
-                        <h2>Upcoming Appointments</h2>
+                        <h2>Programările Viitoare</h2>
                         @if (ViewBag.UpcomingAppointments.Count == 0)
                         {
-                            <p>No upcoming appointments.</p>
+                            <p>Nu aveți nicio programare în viitorul apropiat.</p>
                         }
                         else
                         {

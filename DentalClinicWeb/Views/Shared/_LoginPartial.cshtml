@@ -49,7 +49,7 @@
                         var pastNotifications = Context.Notifications.Where(n => n.ReceiverId == user.Id && n.IsRead).OrderByDescending(n => n.CreatedAt).ToList();
                         @if (numberNewNotifications > 0)
                         {
-                            <h6 class="dropdown-header">New Notifications (@numberNewNotifications)</h6>
+                            <h6 class="dropdown-header">Notificări Noi (@numberNewNotifications)</h6>
                             @foreach (var notification in newNotifications.Take(5))
                             {
                                 <a class="dropdown-item">
@@ -64,13 +64,13 @@
                             }
                             @if (newNotifications.Count > 5)
                             {
-                                <a class="dropdown-item" href="/Notifications/Index">View all new notifications</a>
+                                <a class="dropdown-item" href="/Notifications/Index">Vezi toate notificările</a>
                             }
                         }
                         if (numberPastNotifications > 0)
                         {
                             <div class="dropdown-divider"></div>
-                            <h6 class="dropdown-header">Past Notifications (@numberPastNotifications)</h6>
+                            <h6 class="dropdown-header">Nitificări din Trecut (@numberPastNotifications)</h6>
                         }
                         @foreach (var notification in pastNotifications.Take(5))
                         {
@@ -86,19 +86,19 @@
                         }
                         @if (pastNotifications.Count > 5)
                         {
-                            <a class="dropdown-item" href="/Notifications/Index">View all past notifications</a>
+                            <a class="dropdown-item" href="/Notifications/Index">Vezi Toate Notificările</a>
                         }
                         @if(numberNewNotifications == 0 && numberPastNotifications == 0)
                         {
                             <a class="dropdown-item">
-                                <h6 class="mb-1">No notofication to show.</h6>
+                                <h6 class="mb-1">Nu exista nicio notificare.</h6>
                             </a>
                         }
                     }
                     else
                     {
                         <a class="dropdown-item">
-                            <h6 class="mb-1">No notofication to show.</h6>
+                            <h6 class="mb-1">Nu exista nicio notificare.</h6>
                         </a>
                     }
                     <script>
@@ -128,7 +128,7 @@
             <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Login"><i class="bi bi-box-arrow-in-right"></i> Login</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Register">Register</a>
+            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Register">Creare Cont</a>
         </li>
     }
 </ul>

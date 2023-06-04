@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using DentalClinicWeb.Models;
 
 namespace DentalClinicWeb.Areas.Identity.Pages.Account
 {
@@ -21,11 +22,13 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
+        private readonly ApplicationDbContext _context; 
 
-        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender, ApplicationDbContext context)
         {
             _userManager = userManager;
             _emailSender = emailSender;
+            _context = context;
         }
 
         /// <summary>
@@ -48,6 +51,13 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+
+            [Required]
+            public string Password { get; set; }
+            [Required]
+            public string ConfirmPassword { get; set; }
+
+
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -71,12 +81,34 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
 
-                await _emailSender.SendEmailAsync(
-                    Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                // Update the user's password
+                var newPassword = Input.Password;
+                var resetResult = await _userManager.ResetPasswordAsync(user, code, newPassword);
+                if (resetResult.Succeeded)
+                {
 
-                return RedirectToPage("./ForgotPasswordConfirmation");
+                    var sms = new SMS
+                    {
+                        PhoneNumber = $"+4{user.PhoneNumber}",
+                        Message = $"Vă informăm că parola dumneavoastră a fost schimbată cu succes! Parola nouă: {newPassword}",
+                        IsSent = false,
+                        CreatedAt = DateTime.Now,
+                    };
+                    // Add the sms to the database
+                    await _context.SMS.AddAsync(sms);
+
+                    await _context.SaveChangesAsync();
+
+                    SendSMS.sendSMS(sms.PhoneNumber, sms.Message);
+                    return RedirectToPage("./ForgotPasswordConfirmation");
+                }
+                else
+                {
+                    foreach (var error in resetResult.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
             }
 
             return Page();
