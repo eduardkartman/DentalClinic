@@ -7,17 +7,120 @@
 }
 
 <style>
+    .selectedRow {
+        outline: 2px solid #007bff;
+    }
+
+    .selectDoctorButton,
+    .selectTreatmentButton {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        padding: 5px 10px;
+        border-radius: 20px; /* Set border-radius to make it rounded */
+    }
+
+    .card {
+        border-radius: 20px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
     .rounded-frame {
-        border-radius: 10px;
+        border-radius: 20px;
         border: 1px solid #ddd;
-        padding: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        background-color: #f8f8f8;
+    }
+
+    h2 {
+        color: #000000;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+
+    .selectDoctorButton.selected,
+    .selectTreatmentButton.selected {
+        background-color: #28a745;
+    }
+
+    /* New styles */
+
+    /* Style for the main content */
+    main {
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #f8f9fa;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Style for the headings */
+    h1,
+    h2,
+    h3 {
+        font-size: 24px;
+        font-weight: bold;
         margin-bottom: 20px;
     }
 
+    /* Style for the form input fields */
+    input[type="datetime-local"],
+    .form-control {
+        border-radius: 5px;
+    }
+
+    /* Style for the table */
+    table {
+        border-radius: 5px;
+        overflow: hidden; /* Ensure table border-radius is applied to inner elements */
+    }
+
+    /* Style for the table header */
+    th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+        color: #333;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    /* Style for the table rows */
+    tbody tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+
+    /* Style for the table cells */
+    td {
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    /* Style for the submit button */
+    #submitBtn {
+        margin-top: 20px;
+        border-radius: 20px;
+    }
+
+    /* Style for the container */
+    .container-fluid {
+        padding: 0; /* Remove padding to make the main content full-width */
+    }
+
+    /* Style for the error box */
+    #error-box {
+        padding-right: 15px; /* Adjust as per your needs */
+    }
 </style>
 
 <div class="container-fluid">
-    <br />
     <div class="row">
         <!-- Sidebar -->
         <nav class="col-md-2 d-none d-md-block bg-light sidebar">

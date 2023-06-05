@@ -1,20 +1,148 @@
-﻿@{
-    ViewData["Title"] = "Dental Clinic";
-
+﻿@page
+@using DentalClinicWeb.Data;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
 <style>
+    /* Added styles for a more playful and rounded appearance */
+    .card {
+        border-radius: 20px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
     .rounded-frame {
-        border-radius: 10px;
+        border-radius: 20px;
         border: 1px solid #ddd;
-        padding: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        background-color: #f8f8f8;
+    }
+
+    h2 {
+        color: #000000;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .selectDoctorButton,
+    .selectTreatmentButton {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        padding: 5px 10px;
+        border-radius: 3px;
+    }
+
+        .selectDoctorButton.selected,
+        .selectTreatmentButton.selected {
+            background-color: #28a745;
+        }
+
+    /* New styles */
+
+    /* Style for the main content */
+    main {
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #f8f9fa;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Style for the headings */
+    h1,
+    h2,
+    h3 {
+        font-size: 24px;
+        font-weight: bold;
         margin-bottom: 20px;
     }
 
+    /* Style for the form input fields */
+    input[type="datetime-local"],
+    .form-control {
+        border-radius: 5px;
+    }
+
+    /* Style for the table */
+    table {
+        border-radius: 5px;
+        overflow: hidden; /* Ensure table border-radius is applied to inner elements */
+    }
+
+    /* Style for the table header */
+    th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+        color: #333;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    /* Style for the table rows */
+    tbody tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+
+    /* Style for the table cells */
+    td {
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    /* Style for the submit button */
+    #submitBtn {
+        margin-top: 20px;
+        border-radius: 20px;
+    }
+
+    /* Style for the container */
+    .container-fluid {
+        padding: 0; /* Remove padding to make the main content full-width */
+    }
+
+    /* Style for the error box */
+    #error-box {
+        padding-right: 15px; /* Adjust as per your needs */
+    }
 </style>
 
 <div class="container-fluid">
+    @if (!SignInManager.IsSignedIn(User))
+    {
+        <div class="p-1 text-white text-center">
+            <div id="slideshow" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+                <!-- Added data-bs-interval attribute for automatic sliding every 3 seconds -->
+                <!-- Slides -->
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="/Images/slider1.jpg" alt="Slide 1">
+                    </div>
+                    <!-- Add more slides here -->
+                </div>
+                <!-- Navigation buttons -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#slideshow" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#slideshow" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    }
+
     <div class="row">
         <!-- Sidebar -->
         <nav class="col-md-2 d-none d-md-block bg-light sidebar">
@@ -57,7 +185,7 @@
         <!-- Main Content -->
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-               <h2></h2>
+                <h2>Panou Principal</h2>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group mr-2">
                         <button type="button" class="btn btn-sm btn-outline-secondary">Ziua</button>
@@ -72,45 +200,46 @@
             </div>
             <!-- Account Details -->
             <div class="row">
-
                 <div class="col-md-6">
-                    <h2>Detaliile Contului</h2>
-                    <div class="form-group">
-                        <label for="inputRole">Rol:</label>
-                        <input type="text" class="form-control" id="inputRole" value="Pacient" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputName">Prenume:</label>
-                        <input type="text" class="form-control" id="inputFirstName" value="@ViewBag.FirstName" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputName">Nume:</label>
-                        <input type="text" class="form-control" id="inputLastName" value="@ViewBag.LastName" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputEmail">Email:</label>
-                        <input type="email" class="form-control" id="inputEmail" value="@ViewBag.Email" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputPhone">Mobil:</label>
-                        <input type="tel" class="form-control" id="inputPhone" value="@ViewBag.PhoneNumber" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputCountry">Țară:</label>
-                        <input type="text" class="form-control" id="inputCountry" value="@ViewBag.Country" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputCity">Oraș:</label>
-                        <input type="text" class="form-control" id="inputCity" value="@ViewBag.City" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputZipCode">Cod Poștal:</label>
-                        <input type="text" class="form-control" id="inputZipCode" value="@ViewBag.ZipCode" readonly>
+                    <div class="rounded-frame">
+                        <h3>Detaliile Contului</h3>
+                        <div class="form-group">
+                            <label for="inputRole">Rol:</label>
+                            <input type="text" class="form-control" id="inputRole" value="Pacient" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputName">Prenume:</label>
+                            <input type="text" class="form-control" id="inputFirstName" value="@ViewBag.FirstName" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputName">Nume:</label>
+                            <input type="text" class="form-control" id="inputLastName" value="@ViewBag.LastName" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail">Email:</label>
+                            <input type="email" class="form-control" id="inputEmail" value="@ViewBag.Email" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPhone">Mobil:</label>
+                            <input type="tel" class="form-control" id="inputPhone" value="@ViewBag.PhoneNumber" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputCountry">Țară:</label>
+                            <input type="text" class="form-control" id="inputCountry" value="@ViewBag.Country" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputCity">Oraș:</label>
+                            <input type="text" class="form-control" id="inputCity" value="@ViewBag.City" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputZipCode">Cod Poștal:</label>
+                            <input type="text" class="form-control" id="inputZipCode" value="@ViewBag.ZipCode" readonly>
+                        </div>
                     </div>
                 </div>
                 <!-- Appointment Summary -->
                 <div class="col-md-6">
-                    <div class="rounded-frame p-2 frame">
+                    <div class="rounded-frame">
                         <h2>Programările de Astăzi</h2>
                         @if (ViewBag.TodaysAppointments.Count == 0)
                         {
@@ -134,7 +263,7 @@
                             </ul>
                         }
                     </div>
-                    <div class="rounded-frame p-2 frame">
+                    <div class="rounded-frame">
                         <h2>Programările Viitoare</h2>
                         @if (ViewBag.UpcomingAppointments.Count == 0)
                         {

@@ -85,7 +85,7 @@
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="PatientView">Despre Cont</a>
+                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="PatientView">Cont</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/ManageUsers">Utilizatori</a>
@@ -94,13 +94,13 @@
                         else if (User.IsInRole("Patient"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="PatientView">Despre Cont</a>
+                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="PatientView">Cont</a>
                             </li>
                         }
                         else if (User.IsInRole("Doctor"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="DoctorView">Despre </a>
+                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="DoctorView">Cont</a>
                             </li>
                         }
                     </ul>

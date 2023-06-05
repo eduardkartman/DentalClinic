@@ -1,11 +1,104 @@
 ﻿@page
-@using DentalClinicWeb.Data;
+@using DentalClinicWeb.Data
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+<style>
+    /* Existing styles */
+
+    .selectedRow {
+        outline: 2px solid #007bff;
+    }
+
+    .selectDoctorButton,
+    .selectTreatmentButton {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        padding: 5px 10px;
+        border-radius: 3px;
+    }
+
+        .selectDoctorButton.selected,
+        .selectTreatmentButton.selected {
+            background-color: #28a745;
+        }
+
+    /* New styles */
+
+    /* Style for the main content */
+    main {
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #f8f9fa;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Style for the headings */
+    h1,
+    h2,
+    h3 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    /* Style for the form input fields */
+    input[type="datetime-local"],
+    .form-control {
+        border-radius: 5px;
+    }
+
+    /* Style for the table */
+    table {
+        border-radius: 5px;
+        overflow: hidden; /* Ensure table border-radius is applied to inner elements */
+    }
+
+    /* Style for the table header */
+    th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+        color: #333;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    /* Style for the table rows */
+    tbody tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+
+    /* Style for the table cells */
+    td {
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    /* Style for the submit button */
+    #submitBtn {
+        margin-top: 20px;
+        border-radius: 20px;
+    }
+
+    /* Style for the container */
+    .container-fluid {
+        padding: 0; /* Remove padding to make the main content full-width */
+    }
+
+    /* Style for the error box */
+    #error-box {
+        padding-right: 15px; /* Adjust as per your needs */
+    }
+
+
+
+</style>
 
 <div class="container-fluid">
     @if (!SignInManager.IsSignedIn(User))
@@ -33,27 +126,29 @@
         <div class="col-md-8">
             <div class="row mt-5">
                 <div class="col-md-12">
-                    <h1>Bun venit la Dental Clinic!</h1>
-                    <br />
-                    <h3>Cine suntem?</h3>
-                    <p>Suntem o clinică de microscopie dentară care își desfășoară activitatea în Brașov.</p> 
-                    <p>În cadrul clinicii, manoperele stomatologice se realizează cu ajutorul microscopului dentar, transformând astfel acele manopere bazate în trecut pe simțul tactil în manopere bazate pe vizualizare și precizie. De până la 25 de ori mai mari.</p>
-                    <br />
-                    <h3>Experți în stomatologie</h3>
-                    <p>Credem în hiperspecializare, medicii noștri sunt profesioniști din arii stomatologice distincte și lucrează împreună pentru a oferi fiecărui pacient tratament integrat și complet. </p>
-                    <br />
-                    <h3>Tehnologie de top</h3>
-                    <p>Am ales echipamente de înaltă performanță furnizate de companii recunoscute global în producția de unit­uri dentale digitale și nu numai.</p>
-                    <br />
-                    <h3>Materiale de înaltă calitate</h3>
-                    <p>Nu facem compromisuri în ceea ce privește estetica, funcționalitatea și versatilitatea materialelor folosite. Lucrăm cu producători de top în piața implanturilor dentare, precum și cu dispozitive medicale ale unor companii lider în domeniul soluțiilor de implant dentar și regenerare de țesuturi, inovării și cercetării.</p>
-                    <br />
-                    <h3>Cercetare și educație continuă</h3>
-                    <p>Ne susținem medicii să investească în mod constant în educația continuă și în cunoașterea celor mai noi descoperiri din domeniile de specialitate, pentru a putea oferi cele mai bune tratamente, folosind cele mai moderne și eficiente tehnici.</p>
-                    <br />
-                    <h3>Servicii de 5 stele</h3>
-                    <p>Oferim pacienților noștri atenția personalizată pe care o merită, într-­un mediu relaxant și degajat și suntem alături de aceștia în fiecare pas al planului de tratament.</p>
-                    <br />
+                    <div class="main-content">
+                        <h1>Bun venit la Dental Clinic!</h1>
+                        <br />
+                        <h3>Cine suntem?</h3>
+                        <p>Suntem o clinică de microscopie dentară care își desfășoară activitatea în Brașov.</p>
+                        <p>În cadrul clinicii, manoperele stomatologice se realizează cu ajutorul microscopului dentar, transformând astfel acele manopere bazate în trecut pe simțul tactil în manopere bazate pe vizualizare și precizie. De până la 25 de ori mai mari.</p>
+                        <br />
+                        <h3>Experți în stomatologie</h3>
+                        <p>Credem în hiperspecializare, medicii noștri sunt profesioniști din arii stomatologice distincte și lucrează împreună pentru a oferi fiecărui pacient tratament integrat și complet.</p>
+                        <br />
+                        <h3>Tehnologie de top</h3>
+                        <p>Am ales echipamente de înaltă performanță furnizate de companii recunoscute global în producția de unit­uri dentale digitale și nu numai.</p>
+                        <br />
+                        <h3>Materiale de înaltă calitate</h3>
+                        <p>Nu facem compromisuri în ceea ce privește estetica, funcționalitatea și versatilitatea materialelor folosite. Lucrăm cu producători de top în piața implanturilor dentare, precum și cu dispozitive medicale ale unor companii lider în domeniul soluțiilor de implant dentar și regenerare de țesuturi, inovării și cercetării.</p>
+                        <br />
+                        <h3>Cercetare și educație continuă</h3>
+                        <p>Ne susținem medicii să investească în mod constant în educația continuă și în cunoașterea celor mai noi descoperiri din domeniile de specialitate, pentru a putea oferi cele mai bune tratamente, folosind cele mai moderne și eficiente tehnici.</p>
+                        <br />
+                        <h3>Servicii de 5 stele</h3>
+                        <p>Oferim pacienților noștri atenția personalizată pe care o merită, într-­un mediu relaxant și degajat și suntem alături de aceștia în fiecare pas al planului de tratament.</p>
+                        <br />
+                    </div>
                 </div>
             </div>
         </div>

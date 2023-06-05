@@ -177,7 +177,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
                 user.City = Input.City;
                 user.Country = Input.Country;
                 user.ZipCode = Input.ZipCode;
-                user.Role = Input.Role;
+                user.Role = "Patient";
 
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
@@ -187,14 +187,14 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     // added roles to AspNetUsers
-                    await _userManager.AddToRoleAsync(user, Input.Role);
+                    await _userManager.AddToRoleAsync(user, "Patient");
                     // created user in Users
                     var userViewModel = CreateUserViewModel(user);
                     _context.Users.Add(userViewModel);
 
 
                     // Add user to patient or doctor table
-                    if (Input.Role == "Doctor")
+                    /*if (Input.Role == "Doctor")
                     {
                         var doctor = new DoctorViewModel
                         {
@@ -210,8 +210,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
                         };
                         _context.Doctors.Add(doctor);
                     }
-                    else if (Input.Role == "Patient")
-                    {
+                    */
                         var patient = new PatientViewModel
                         {
                             Id = user.Id,
@@ -225,7 +224,6 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
 
                         };
                         _context.Patients.Add(patient);
-                    }
 
                     // Save changes to database
                     await _context.SaveChangesAsync();
