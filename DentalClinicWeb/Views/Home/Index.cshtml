@@ -1,207 +1,448 @@
-﻿@page
-@using DentalClinicWeb.Data
-@using Microsoft.AspNetCore.Identity
-@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
+﻿<!doctype html>
+<html lang="en" data-bs-theme="auto">
+<head>
+    <script src="../assets/js/color-modes.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.112.5">
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/carousel/">
+    <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="carousel.css" rel="stylesheet">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 
-@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-<style>
-    /* Existing styles */
-
-    .selectedRow {
-        outline: 2px solid #007bff;
-    }
-
-    .selectDoctorButton,
-    .selectTreatmentButton {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        cursor: pointer;
-        padding: 5px 10px;
-        border-radius: 3px;
-    }
-
-        .selectDoctorButton.selected,
-        .selectTreatmentButton.selected {
-            background-color: #28a745;
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
         }
 
-    /* New styles */
+        media (min-width: 768px) {
+            .bd-placeholder-img-lg
 
-    /* Style for the main content */
-    main {
-        padding: 20px;
-        border-radius: 10px;
-        background-color: #f8f9fa;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
+        {
+            font-size: 3.5rem;
+        }
 
-    /* Style for the headings */
-    h1,
-    h2,
-    h3 {
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
+        }
 
-    /* Style for the form input fields */
-    input[type="datetime-local"],
-    .form-control {
-        border-radius: 5px;
-    }
+        .b-example-divider {
+            width: 100%;
+            height: 3rem;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+        }
 
-    /* Style for the table */
-    table {
-        border-radius: 5px;
-        overflow: hidden; /* Ensure table border-radius is applied to inner elements */
-    }
+        .b-example-vr {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+        }
 
-    /* Style for the table header */
-    th {
-        background-color: #f8f9fa;
-        font-weight: bold;
-        color: #333;
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-    }
+        .bi {
+            vertical-align: -.125em;
+            fill: currentColor;
+        }
 
-    /* Style for the table rows */
-    tbody tr:nth-child(even) {
-        background-color: #f8f9fa;
-    }
+        .nav-scroller {
+            position: relative;
+            z-index: 2;
+            height: 2.75rem;
+            overflow-y: hidden;
+        }
 
-    /* Style for the table cells */
-    td {
-        border-bottom: 1px solid #dee2e6;
-    }
+            .nav-scroller .nav {
+                display: flex;
+                flex-wrap: nowrap;
+                padding-bottom: 1rem;
+                margin-top: -1px;
+                overflow-x: auto;
+                text-align: center;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
 
-    /* Style for the submit button */
-    #submitBtn {
-        margin-top: 20px;
-        border-radius: 20px;
-    }
+        .btn-bd-primary {
+            --bd-violet-bg: #712cf9;
+            --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+            --bs-btn-font-weight: 600;
+            --bs-btn-color: var(--bs-white);
+            --bs-btn-bg: var(--bd-violet-bg);
+            --bs-btn-border-color: var(--bd-violet-bg);
+            --bs-btn-hover-color: var(--bs-white);
+            --bs-btn-hover-bg: #6528e0;
+            --bs-btn-hover-border-color: #6528e0;
+            --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+            --bs-btn-active-color: var(--bs-btn-hover-color);
+            --bs-btn-active-bg: #5a23c8;
+            --bs-btn-active-border-color: #5a23c8;
+        }
 
-    /* Style for the container */
-    .container-fluid {
-        padding: 0; /* Remove padding to make the main content full-width */
-    }
+        .bd-mode-toggle {
+            z-index: 1500;
+        }
 
-    /* Style for the error box */
-    #error-box {
-        padding-right: 15px; /* Adjust as per your needs */
-    }
+        .selectedRow {
+            outline: 2px solid #007bff;
+        }
 
+        .selectDoctorButton,
+        .selectTreatmentButton {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 3px;
+        }
 
+            .selectDoctorButton.selected,
+            .selectTreatmentButton.selected {
+                background-color: #28a745;
+            }
 
-</style>
+        /* New styles */
 
-<div class="container-fluid">
-    @if (!SignInManager.IsSignedIn(User))
-    {
-        <div class="p-1 text-white text-center">
-            <div id="slideshow" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
-                <!-- Added data-bs-interval attribute for automatic sliding every 3 seconds -->
-                <!-- Slides -->
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="/Images/slider1.jpg" alt="Slide 1">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="/Images/slider2.jpg" alt="Slide 2">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="/Images/slider3.jpg" alt="Slide 3">
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
+        /* Style for the main content */
+        main {
+            padding: 1px;
+            border-radius: 1px;
+            background-color: #f8f9fa;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-    <div class="row">
-        <div class="col-md-8">
-            <div class="row mt-5">
-                <div class="col-md-12">
-                    <div class="main-content">
-                        <h1>Bun venit la Dental Clinic!</h1>
-                        <br />
-                        <h3>Cine suntem?</h3>
-                        <p>Suntem o clinică de microscopie dentară care își desfășoară activitatea în Brașov.</p>
-                        <p>În cadrul clinicii, manoperele stomatologice se realizează cu ajutorul microscopului dentar, transformând astfel acele manopere bazate în trecut pe simțul tactil în manopere bazate pe vizualizare și precizie. De până la 25 de ori mai mari.</p>
-                        <br />
-                        <h3>Experți în stomatologie</h3>
-                        <p>Credem în hiperspecializare, medicii noștri sunt profesioniști din arii stomatologice distincte și lucrează împreună pentru a oferi fiecărui pacient tratament integrat și complet.</p>
-                        <br />
-                        <h3>Tehnologie de top</h3>
-                        <p>Am ales echipamente de înaltă performanță furnizate de companii recunoscute global în producția de unit­uri dentale digitale și nu numai.</p>
-                        <br />
-                        <h3>Materiale de înaltă calitate</h3>
-                        <p>Nu facem compromisuri în ceea ce privește estetica, funcționalitatea și versatilitatea materialelor folosite. Lucrăm cu producători de top în piața implanturilor dentare, precum și cu dispozitive medicale ale unor companii lider în domeniul soluțiilor de implant dentar și regenerare de țesuturi, inovării și cercetării.</p>
-                        <br />
-                        <h3>Cercetare și educație continuă</h3>
-                        <p>Ne susținem medicii să investească în mod constant în educația continuă și în cunoașterea celor mai noi descoperiri din domeniile de specialitate, pentru a putea oferi cele mai bune tratamente, folosind cele mai moderne și eficiente tehnici.</p>
-                        <br />
-                        <h3>Servicii de 5 stele</h3>
-                        <p>Oferim pacienților noștri atenția personalizată pe care o merită, într-­un mediu relaxant și degajat și suntem alături de aceștia în fiecare pas al planului de tratament.</p>
-                        <br />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <div class="col-md-4">
-            <div class="card mt-5">
-                <div class="card-body">
-                    <h5 class="card-title">Serviciile Noastre</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Albire Dentară</li>
-                        <li class="list-group-item">Implanturi Dentare</li>
-                        <li class="list-group-item">Tratamentul Canalului Radicular</li>
-                        <li class="list-group-item">Coronare Dentară</li>
-                        <li class="list-group-item">Aparat Dentar</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="card mt-5">
-                <div class="card-body">
-                    <h5 class="card-title">Echipa Noastră</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Dr. John Doe</li>
-                        <li class="list-group-item">Dr. Jane Smith</li>
-                        <li class="list-group-item">Dr. Michael Johnson</li>
-                        <li class="list-group-item">Dr. Sarah Lee</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="card mt-5">
-                <div class="card-body">
-                    <h5 class="card-title">Contactează-ne!</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Strada General Mociulschi nr. 10B</li>
-                        <li class="list-group-item">Brașov, România</li>
-                        <li class="list-group-item">Telefon: (+40) 773 990 047</li>
-                        <li class="list-group-item">Email: eduard.kartman10@gmail.com</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        /* Style for the headings */
+        h1,
+        h2,
+        h3 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* Style for the form input fields */
+        input[type="datetime-local"],
+        .form-control {
+            border-radius: 5px;
+        }
+
+        /* Style for the table */
+        table {
+            border-radius: 5px;
+            overflow: hidden; /* Ensure table border-radius is applied to inner elements */
+        }
+
+        /* Style for the table header */
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+
+        /* Style for the table rows */
+        tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        /* Style for the table cells */
+        td {
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        /* Style for the submit button */
+        #submitBtn {
+            margin-top: 20px;
+            border-radius: 20px;
+        }
+
+        /* Style for the container */
+        .container-fluid {
+            padding: 0; /* Remove padding to make the main content full-width */
+        }
+
+        /* Style for the error box */
+        #error-box {
+            padding-right: 15px; /* Adjust as per your needs */
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-body {
+            display: flex;
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .list-group-item {
+            padding: 5px 0;
+            border: none;
+        }
+
+        .map-container {
+            position: relative;
+            height: 450px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+            .map-container iframe {
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                border: 0;
+            }
+    </style>
+
+</head>
+<body>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="check2" viewBox="0 0 16 16">
+            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
+        </symbol>
+        <symbol id="circle-half" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z" />
+        </symbol>
+        <symbol id="moon-stars-fill" viewBox="0 0 16 16">
+            <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z" />
+            <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z" />
+        </symbol>
+        <symbol id="sun-fill" viewBox="0 0 16 16">
+            <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z" />
+        </symbol>
+    </svg>
+
+    <div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle">
+        <button class="btn btn-bd-primary py-2 dropdown-toggle d-flex align-items-center"
+                id="bd-theme"
+                type="button"
+                aria-expanded="false"
+                data-bs-toggle="dropdown"
+                aria-label="Toggle theme (auto)">
+            <svg class="bi my-1 theme-icon-active" width="1em" height="1em"><use href="#circle-half"></use></svg>
+            <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bd-theme-text">
+            <li>
+                <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+                    <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em"><use href="#sun-fill"></use></svg>
+                    Light
+                    <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
+                </button>
+            </li>
+            <li>
+                <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+                    <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em"><use href="#moon-stars-fill"></use></svg>
+                    Dark
+                    <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
+                </button>
+            </li>
+            <li>
+                <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto" aria-pressed="true">
+                    <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em"><use href="#circle-half"></use></svg>
+                    Auto
+                    <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg>
+                </button>
+            </li>
+        </ul>
     </div>
-</div>
+    <main>
 
-@section Scripts {
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.9.3/dist/umd/popper-core.min.js"
-            integrity="sha384-+JZJzvJZJzvJZJzvJZJzvJZJzvJZJzvJZJzvJZJzvJZJzvJZJzvJZJzvJZJzvJZJ"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.03/dist/js/bootstrap.min.js"
-            integrity="sha384-..."></script>
-}
+        <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel" data-bs-theme="light">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="bd-placeholder-img" width="100%" height="100%" src="/images/slider1.jpg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)" /></img>
+                    <div class="container">
+                        <div class="carousel-caption text-start">
+                            <h1>Example headline.</h1>
+                            <p class="opacity-75">Some representative placeholder content for the first slide of the carousel.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img class="bd-placeholder-img" width="100%" height="100%" src="/images/slider2.jpg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)" /></img>
+                    <div class="container">
+                        <div class="carousel-caption">
+                            <h1>Another example headline.</h1>
+                            <p>Some representative placeholder content for the second slide of the carousel.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img class="bd-placeholder-img" width="100%" height="100%" src="/images/slider3.jpg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)" /></img>
+                    <div class="container">
+                        <div class="carousel-caption text-end">
+                            <h1>One more for good measure.</h1>
+                            <p>Some representative placeholder content for the third slide of this carousel.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img class="bd-placeholder-img" width="100%" height="100%" src="/images/slider4.jpg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)" /></img>
+                    <div class="container">
+                        <div class="carousel-caption">
+                            <h1>Another example headline.</h1>
+                            <p>Some representative placeholder content for the second slide of the carousel.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        <br />
+
+        <div class="container marketing">
+            <h1 class="featurette-heading fw-normal lh-1">Bun venit la Dental Clinic!</h1>
+            <br />
+            <h2 class="featurette-heading fw-normal lh-1">Cine suntem?</h2>
+            <p class="lead">Suntem o clinică de microscopie dentară care își desfășoară activitatea în Brașov.</p>
+            <p class="lead">În cadrul clinicii, manoperele stomatologice se realizează cu ajutorul microscopului dentar, transformând astfel acele manopere bazate în trecut pe simțul tactil în manopere bazate pe vizualizare și precizie. De până la 25 de ori mai mari.</p>
+            <br />
+            <h1 class="featurette-heading fw-normal lh-1">
+                Experți în stomatologie</h2>
+                <p class="lead">Credem în hiperspecializare, medicii noștri sunt profesioniști din arii stomatologice distincte și lucrează împreună pentru a oferi fiecărui pacient tratament integrat și complet.</p>
+                <br />
+
+                <div class="row">
+                    <div class="col-lg-3">
+                        <img class="bd-placeholder-img rounded-circle" width="140" height="140" role="img" src="/Images/dr1.png" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)" />
+                        <br />
+                        <p class="lead">   Dr. John Doe</p>
+                    </div><!-- /.col-lg-4 -->
+                    <div class="col-lg-3">
+                        <img class="bd-placeholder-img rounded-circle" width="140" height="140" src="/Images/dr2.png" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)" />
+                        <br />
+                        <p class="lead">Dr. Will Smith</p>
+                    </div><!-- /.col-lg-4 -->
+                    <div class="col-lg-3">
+                        <img class="bd-placeholder-img rounded-circle" width="140" height="140" src="/Images/dr3.png" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)" />
+                        <br />
+                        <p class="lead">Dr. Michael Bolt</p>
+                    </div>
+                    <div class="col-lg-3">
+                        <img class="bd-placeholder-img rounded-circle" width="140" height="140" src="/Images/dr4.png" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)" />
+                        <br />
+                        <p class="lead">Dr. Sarah Jackson</p>
+                    </div>
+                    <br />
+                </div><!-- /.row -->
+                <!-- START THE FEATURETTES -->
+
+                <hr class="featurette-divider">
+
+                <div class="row featurette">
+                    <div class="col-md-7">
+                        <h1 class="featurette-heading fw-normal lh-1">Materiale de înaltă calitate. <span class="text-body-secondary"></span></h1>
+                        <p class="lead">Nu facem compromisuri în ceea ce privește estetica, funcționalitatea și versatilitatea materialelor folosite. Lucrăm cu producători de top în piața implanturilor dentare, precum și cu dispozitive medicale ale unor companii lider în domeniul soluțiilor de implant dentar și regenerare de țesuturi, inovării și cercetării.</p>
+                        <p class="lead">Aceste echipamente de înaltă performanță și abordarea noastră orientată către tehnologie și inovație reprezintă angajamentul nostru de a asigura calitatea și excelenta în fiecare aspect al serviciilor noastre stomatologice.</p>
+                    </div>
+                    <div class="col-md-5">
+                        <img class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" src="/Images/poza2.jpeg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-bg)" />
+                    </div>
+                </div>
+
+                <hr class="featurette-divider">
+
+                <div class="row featurette">
+                    <div class="col-md-7 order-md-2">
+                        <h2 class="featurette-heading fw-normal lh-1">Cercetare și educație continuă. <span class="text-body-secondary">Servicii de 5 stele.</span></h2>
+                        <p class="lead">Oferim pacienților noștri atenția personalizată pe care o merită, într-­un mediu relaxant și degajat și suntem alături de aceștia în fiecare pas al planului de tratament.</p>
+                        <p class="lead">Suntem dedicați cercetării și educației continue pentru a ne menține la înălțimea standardelor medicale și pentru a ne asigura că oferim cele mai avansate și eficiente metode de tratament stomatologic.</p>
+                        <br />
+                    </div>
+                    <div class="col-md-5 order-md-1">
+                        <img class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" src="/Images/poza3.png" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-bg)" />
+                    </div>
+                </div>
+
+                <hr class="featurette-divider">
+
+                <div class="row featurette">
+                    <div class="col-md-7">
+                        <h2 class="featurette-heading fw-normal lh-1">Tehnologie de top. <span class="text-body-secondary">De ce să ne alegi?</span></h2>
+                        <p class="lead">Am ales echipamente de înaltă performanță furnizate de companii recunoscute global în producția de unit­uri dentale digitale și nu numai.</p>
+                        <p class="lead">Continuăm să investim în tehnologie de top pentru a oferi pacienților noștri cele mai avansate și precise tratamente stomatologice disponibile. Această alegere ne permite să utilizăm echipamente și instrumente moderne, care ne ajută să obținem rezultate superioare și să asigurăm confortul și siguranța pacienților noștri.</p>
+                    </div>
+                    <div class="col-md-5">
+                        <img class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" src="/Images/poza1.jpg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-bg)" />
+                    </div>
+                </div>
+
+                <hr class="featurette-divider">
+
+                <!--Contact Us!-->
+                <div class="card mt-7">
+                    <div class="card-body">
+                        <div class="col-md-6">
+                            <h2 class="card-title">Contactează-ne!</h2>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <i class="bi bi-geo-alt-fill text-primary"> : </i> Strada General Mociulschi Nr. 10, 500146, Brașov, România
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="bi bi-phone-fill text-primary"> : </i> (+40) 773 990 047
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="bi bi-envelope-fill text-primary"> : </i> eduard.kartman10@gmail.com
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="bi bi-clock-fill text-primary"> : </i> Program
+                                    <ul>
+                                        <li>Luni :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:00 - 18:30</li>
+                                        <li>Marți :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:00 - 18:30</li>
+                                        <li>Miercuri :&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;09:00 - 18:30 </li>
+                                        <li>Joi :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:00 - 18:30</li>
+                                        <li>Vineri :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:00 - 18:30</li>
+                                        <li>Sâmbătă :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Închis</li>
+                                        <li>Duminică :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Închis</li>
+
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="map-container" style="max-width: 610px; height: 380px;">
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d5576.449923973499!2d25.605971000000007!3d45.66638400000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sro!4v1686054337224!5m2!1sen!2sro" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        </div>
+        <br />
+        <br />
+        <br />
+    </main>
+    <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

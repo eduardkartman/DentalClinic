@@ -239,7 +239,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
                     await _context.SMS.AddAsync(sms);
                     await _context.SaveChangesAsync();
 
-                    SendSMS.sendSMS(sms.PhoneNumber, sms.Message);
+                 //   SendSMS.sendSMS(sms.PhoneNumber, sms.Message);
 
                     _logger.LogInformation("User created a new account with password.");
 
