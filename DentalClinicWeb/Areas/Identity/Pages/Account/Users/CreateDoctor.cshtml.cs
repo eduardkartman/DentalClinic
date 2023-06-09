@@ -1,0 +1,260 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+#nullable disable
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Threading;
+using System.Threading.Tasks;
+using DentalClinicWeb.Constans;
+using DentalClinicWeb.Data;
+using DentalClinicWeb.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+
+namespace DentalClinicWeb.Areas.Identity.Pages.Account
+{
+    public class CreateDoctorModel : PageModel
+    {
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserStore<ApplicationUser> _userStore;
+        private readonly IUserEmailStore<ApplicationUser> _emailStore;
+        private readonly ILogger<RegisterModel> _logger;
+        private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext _context;
+
+        public CreateDoctorModel(
+            UserManager<ApplicationUser> userManager,
+            IUserStore<ApplicationUser> userStore,
+            SignInManager<ApplicationUser> signInManager,
+            ILogger<RegisterModel> logger,
+            IEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager,
+            ApplicationDbContext context)
+        {
+            _userManager = userManager;
+            _userStore = userStore;
+            _emailStore = GetEmailStore();
+            _signInManager = signInManager;
+            _logger = logger;
+            _emailSender = emailSender;
+            _roleManager = roleManager;
+            _context = context;
+        }
+
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        [BindProperty]
+        public InputModel Input { get; set; }
+
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        public string ReturnUrl { get; set; }
+
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        public IList<AuthenticationScheme> ExternalLogins { get; set; }
+
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        public class InputModel
+        {
+
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
+
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
+            /// <summary>
+            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+            ///     directly from your code. This API may change or be removed in future releases.
+            /// </summary>
+            [Required]
+            [EmailAddress]
+            [Display(Name = "Email")]
+            public string Email { get; set; }
+
+            /// <summary>
+            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+            ///     directly from your code. This API may change or be removed in future releases.
+            /// </summary>
+            [Required]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [DataType(DataType.Password)]
+            [Display(Name = "Password")]
+            public string Password { get; set; }
+
+            /// <summary>
+            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+            ///     directly from your code. This API may change or be removed in future releases.
+            /// </summary>
+            [DataType(DataType.Password)]
+            [Display(Name = "Confirm password")]
+            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            public string ConfirmPassword { get; set; }
+
+            [Display(Name = "Phone Number")]
+            public string PhoneNumber { get; set; }
+
+            [Display(Name = "Country")]
+            public string Country { get; set; }
+
+            [Display(Name = "City")]
+            public string City { get; set; }
+
+
+            [Display(Name = "ZIP Code")]
+            public string ZipCode { get; set; }
+            [BindProperty]
+            public string Role { get; set; }
+
+            public SelectList RoleList { get; set; }
+        }
+
+
+        public async Task OnGetAsync()
+        {
+            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            var roles = await _roleManager.Roles.ToListAsync();
+            Input = new InputModel
+            {
+                RoleList = new SelectList(roles, nameof(IdentityRole.Name), nameof(IdentityRole.Name))
+            };
+
+        }
+
+        private UserViewModel CreateUserViewModel(ApplicationUser user)
+        {
+            return new UserViewModel
+            {
+                UserId = user.Id,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber,
+                City = user.City,
+                Country = user.Country,
+                ZipCode = user.ZipCode,
+                Role = user.Role
+            };
+        }
+
+
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        {
+            returnUrl ??= Url.Content("~/");
+            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            if (ModelState.IsValid)
+            {
+                var user = CreateUser();
+
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName;
+                user.PhoneNumber = Input.PhoneNumber;
+                user.City = Input.City;
+                user.Country = Input.Country;
+                user.ZipCode = Input.ZipCode;
+                user.Role = "Doctor";
+
+
+                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                var result = await _userManager.CreateAsync(user, Input.Password);
+
+                if (result.Succeeded)
+                {
+                    // added roles to AspNetUsers
+                    await _userManager.AddToRoleAsync(user, "Doctor");
+                    // created user in Users
+                    var userViewModel = CreateUserViewModel(user);
+                    _context.Users.Add(userViewModel);
+
+                    if (Input.Role == "Doctor")
+                    {
+                        var doctor = new DoctorViewModel
+                        {
+                            Id = user.Id,
+                            Email = user.Email,
+                            FirstName = user.FirstName,
+                            LastName = user.LastName,
+                            PhoneNumber = user.PhoneNumber,
+                            City = user.City,
+                            Country = user.Country,
+                            ZipCode = user.ZipCode,
+
+                        };
+                        _context.Doctors.Add(doctor);
+                    }
+                    // Save changes to database
+                    await _context.SaveChangesAsync();
+
+                    var sms = new SMS
+                    {
+                        PhoneNumber = $"+4{user.PhoneNumber}",
+                        Message = "Vă mulțumim că ne-ați ales! Contul dvs. a fost creat cu succes!",
+                        IsSent = false,
+                        CreatedAt = DateTime.Now,
+                    };
+                    // Add the sms to the database
+                    await _context.SMS.AddAsync(sms);
+                    await _context.SaveChangesAsync();
+
+                    //   SendSMS.sendSMS(sms.PhoneNumber, sms.Message                    
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            // If we got this far, something failed, redisplay form
+            return RedirectToPage("/Account/ManageUsers", new { area = "Identity" });
+        }
+
+        private ApplicationUser CreateUser()
+        {
+            try
+            {
+                return Activator.CreateInstance<ApplicationUser>();
+            }
+            catch
+            {
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
+                    $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
+            }
+        }
+
+        private IUserEmailStore<ApplicationUser> GetEmailStore()
+        {
+            if (!_userManager.SupportsUserEmail)
+            {
+                throw new NotSupportedException("The default UI requires a user store with email support.");
+            }
+            return (IUserEmailStore<ApplicationUser>)_userStore;
+        }
+    }
+}

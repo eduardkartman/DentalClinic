@@ -208,6 +208,44 @@
                 left: 0;
                 border: 0;
             }
+
+        .team-member {
+            position: relative;
+            overflow: hidden;
+        }
+
+            .team-member img {
+                transition: transform 0.3s;
+            }
+
+            .team-member:hover img {
+                transform: scale(1.1);
+            }
+
+            .team-member .overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.7);
+                opacity: 0;
+                transition: opacity 0.3s;
+            }
+
+            .team-member:hover .overlay {
+                opacity: 1;
+            }
+
+            .team-member .overlay-text {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                color: #fff;
+                text-align: center;
+            }
+
     </style>
 
 </head>
@@ -263,7 +301,7 @@
         </ul>
     </div>
     <main>
-
+        <!--CAROUSEL-->
         <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel" data-bs-theme="light">
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -276,8 +314,8 @@
                     <img class="bd-placeholder-img" width="100%" height="100%" src="/images/slider1.jpg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)" /></img>
                     <div class="container">
                         <div class="carousel-caption text-start">
-                            <h1>Example headline.</h1>
-                            <p class="opacity-75">Some representative placeholder content for the first slide of the carousel.</p>
+                            <h1>Zâmbetul tău te poate duce departe!</h1>
+                            <p class="opacity-75">Zâmbetul este cel mai de preț dar pe care îl poți oferi cuiva.</p>
                         </div>
                     </div>
                 </div>
@@ -285,8 +323,8 @@
                     <img class="bd-placeholder-img" width="100%" height="100%" src="/images/slider2.jpg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)" /></img>
                     <div class="container">
                         <div class="carousel-caption">
-                            <h1>Another example headline.</h1>
-                            <p>Some representative placeholder content for the second slide of the carousel.</p>
+                            <h1>Ingrijirea dinților este importantă!</h1>
+                            <p>O dantură sănătoasă îți poate aduce multe împliniri și totodată mai puține stări deranjante!</p>
                         </div>
                     </div>
                 </div>
@@ -294,8 +332,8 @@
                     <img class="bd-placeholder-img" width="100%" height="100%" src="/images/slider3.jpg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)" /></img>
                     <div class="container">
                         <div class="carousel-caption text-end">
-                            <h1>One more for good measure.</h1>
-                            <p>Some representative placeholder content for the third slide of this carousel.</p>
+                            <h1>Zâmbetul frumos și o dantură perfectă!</h1>
+                            <p>Un zâmbet frumos, este în strânsă legatură cu dantura ta. Lasă dantura in seama noastră, iar tu promite-ne că vei cuceri lumea cu zâmbetul tau!</p>
                         </div>
                     </div>
                 </div>
@@ -303,8 +341,8 @@
                     <img class="bd-placeholder-img" width="100%" height="100%" src="/images/slider4.jpg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)" /></img>
                     <div class="container">
                         <div class="carousel-caption">
-                            <h1>Another example headline.</h1>
-                            <p>Some representative placeholder content for the second slide of the carousel.</p>
+                            <h1>Noi avem grijă de tine!</h1>
+                            <p>Lasă-te în mâna medicilor noștri, iar ei voi avea grijă de dantura ta! Folosim cele mai performante tehnici pentru a avea grijă de zâmbetul tău!</p>
                         </div>
                     </div>
                 </div>
@@ -319,123 +357,166 @@
             </button>
         </div>
         <br />
-
+        <!--SCRIS-->
         <div class="container marketing">
             <h1 class="featurette-heading fw-normal lh-1">Bun venit la Dental Clinic!</h1>
             <br />
-            <h2 class="featurette-heading fw-normal lh-1">Cine suntem?</h2>
-            <p class="lead">Suntem o clinică de microscopie dentară care își desfășoară activitatea în Brașov.</p>
-            <p class="lead">În cadrul clinicii, manoperele stomatologice se realizează cu ajutorul microscopului dentar, transformând astfel acele manopere bazate în trecut pe simțul tactil în manopere bazate pe vizualizare și precizie. De până la 25 de ori mai mari.</p>
+            <div class="card mt-7">
+                <div class="card-body">
+                    <div class="col-md-10">
+                        <h2 class="featurette-heading fw-normal lh-1">Cine suntem?</h2>
+                        <p class="lead">Suntem o clinică de microscopie dentară care își desfășoară activitatea în Brașov.</p>
+                        <p class="lead">În cadrul clinicii, manoperele stomatologice se realizează cu ajutorul microscopului dentar, transformând astfel acele manopere bazate în trecut pe simțul tactil în manopere bazate pe vizualizare și precizie. De până la 25 de ori mai mari.</p>
+                        <br />
+                    </div>
+                </div>
+            </div>
             <br />
-            <h1 class="featurette-heading fw-normal lh-1">
-                Experți în stomatologie</h2>
-                <p class="lead">Credem în hiperspecializare, medicii noștri sunt profesioniști din arii stomatologice distincte și lucrează împreună pentru a oferi fiecărui pacient tratament integrat și complet.</p>
-                <br />
-
-                <div class="row">
-                    <div class="col-lg-3">
-                        <img class="bd-placeholder-img rounded-circle" width="140" height="140" role="img" src="/Images/dr1.png" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)" />
+            <div class="card mt-7">
+                <div class="card-body">
+                    <div class="col-md">
+                        <h1 class="featurette-heading fw-normal lh-1">Experți în stomatologie</h1>
+                        <p class="lead">Credem în hiperspecializare, medicii noștri sunt profesioniști din arii stomatologice distincte și lucrează împreună pentru a oferi fiecărui pacient tratament integrat și complet.</p>
                         <br />
-                        <p class="lead">   Dr. John Doe</p>
-                    </div><!-- /.col-lg-4 -->
-                    <div class="col-lg-3">
-                        <img class="bd-placeholder-img rounded-circle" width="140" height="140" src="/Images/dr2.png" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)" />
-                        <br />
-                        <p class="lead">Dr. Will Smith</p>
-                    </div><!-- /.col-lg-4 -->
-                    <div class="col-lg-3">
-                        <img class="bd-placeholder-img rounded-circle" width="140" height="140" src="/Images/dr3.png" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)" />
-                        <br />
-                        <p class="lead">Dr. Michael Bolt</p>
-                    </div>
-                    <div class="col-lg-3">
-                        <img class="bd-placeholder-img rounded-circle" width="140" height="140" src="/Images/dr4.png" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)" />
-                        <br />
-                        <p class="lead">Dr. Sarah Jackson</p>
-                    </div>
-                    <br />
-                </div><!-- /.row -->
-                <!-- START THE FEATURETTES -->
-
-                <hr class="featurette-divider">
-
-                <div class="row featurette">
-                    <div class="col-md-7">
-                        <h1 class="featurette-heading fw-normal lh-1">Materiale de înaltă calitate. <span class="text-body-secondary"></span></h1>
-                        <p class="lead">Nu facem compromisuri în ceea ce privește estetica, funcționalitatea și versatilitatea materialelor folosite. Lucrăm cu producători de top în piața implanturilor dentare, precum și cu dispozitive medicale ale unor companii lider în domeniul soluțiilor de implant dentar și regenerare de țesuturi, inovării și cercetării.</p>
-                        <p class="lead">Aceste echipamente de înaltă performanță și abordarea noastră orientată către tehnologie și inovație reprezintă angajamentul nostru de a asigura calitatea și excelenta în fiecare aspect al serviciilor noastre stomatologice.</p>
-                    </div>
-                    <div class="col-md-5">
-                        <img class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" src="/Images/poza2.jpeg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-bg)" />
-                    </div>
-                </div>
-
-                <hr class="featurette-divider">
-
-                <div class="row featurette">
-                    <div class="col-md-7 order-md-2">
-                        <h2 class="featurette-heading fw-normal lh-1">Cercetare și educație continuă. <span class="text-body-secondary">Servicii de 5 stele.</span></h2>
-                        <p class="lead">Oferim pacienților noștri atenția personalizată pe care o merită, într-­un mediu relaxant și degajat și suntem alături de aceștia în fiecare pas al planului de tratament.</p>
-                        <p class="lead">Suntem dedicați cercetării și educației continue pentru a ne menține la înălțimea standardelor medicale și pentru a ne asigura că oferim cele mai avansate și eficiente metode de tratament stomatologic.</p>
-                        <br />
-                    </div>
-                    <div class="col-md-5 order-md-1">
-                        <img class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" src="/Images/poza3.png" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-bg)" />
-                    </div>
-                </div>
-
-                <hr class="featurette-divider">
-
-                <div class="row featurette">
-                    <div class="col-md-7">
-                        <h2 class="featurette-heading fw-normal lh-1">Tehnologie de top. <span class="text-body-secondary">De ce să ne alegi?</span></h2>
-                        <p class="lead">Am ales echipamente de înaltă performanță furnizate de companii recunoscute global în producția de unit­uri dentale digitale și nu numai.</p>
-                        <p class="lead">Continuăm să investim în tehnologie de top pentru a oferi pacienților noștri cele mai avansate și precise tratamente stomatologice disponibile. Această alegere ne permite să utilizăm echipamente și instrumente moderne, care ne ajută să obținem rezultate superioare și să asigurăm confortul și siguranța pacienților noștri.</p>
-                    </div>
-                    <div class="col-md-5">
-                        <img class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" src="/Images/poza1.jpg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-bg)" />
-                    </div>
-                </div>
-
-                <hr class="featurette-divider">
-
-                <!--Contact Us!-->
-                <div class="card mt-7">
-                    <div class="card-body">
-                        <div class="col-md-6">
-                            <h2 class="card-title">Contactează-ne!</h2>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <i class="bi bi-geo-alt-fill text-primary"> : </i> Strada General Mociulschi Nr. 10, 500146, Brașov, România
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="bi bi-phone-fill text-primary"> : </i> (+40) 773 990 047
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="bi bi-envelope-fill text-primary"> : </i> eduard.kartman10@gmail.com
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="bi bi-clock-fill text-primary"> : </i> Program
-                                    <ul>
-                                        <li>Luni :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:00 - 18:30</li>
-                                        <li>Marți :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:00 - 18:30</li>
-                                        <li>Miercuri :&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;09:00 - 18:30 </li>
-                                        <li>Joi :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:00 - 18:30</li>
-                                        <li>Vineri :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:00 - 18:30</li>
-                                        <li>Sâmbătă :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Închis</li>
-                                        <li>Duminică :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Închis</li>
-
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-md-8">
-                            <div class="map-container" style="max-width: 610px; height: 380px;">
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d5576.449923973499!2d25.605971000000007!3d45.66638400000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sro!4v1686054337224!5m2!1sen!2sro" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <!--POZE DOCTORI-->
+                        <div class="row justify-content-center">
+                            <div class="col-lg-3 col-md-6 mb-4">
+                                <div class="team-member">
+                                    <img class="rounded-circle" width="220" height="210" src="/Images/dr1.png" alt="Dr. Popescu Lucian">
+                                    <div class="overlay">
+                                        <div class="overlay-text">
+                                            <h5 class="card-title">Dr. Popescu Lucian</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6 mb-4">
+                                <div class="team-member">
+                                    <img class="rounded-circle" width="225" height="210" src="/Images/dr2.png" alt="Dr. Mihai Dobreanu">
+                                    <div class="overlay">
+                                        <div class="overlay-text">
+                                            <h5 class="card-title">Dr. Mihai Dobreanu</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-3 col-md-6 mb-4">
+                                <div class="team-member">
+                                    <img class="rounded-circle" width="220" height="210" src="/Images/dr3.png" alt="Dr. Vlad Ștefan">
+                                    <div class="overlay">
+                                        <div class="overlay-text">
+                                            <h5 class="card-title">Dr. Vlad Ștefan</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6 mb-4">
+                                <div class="team-member">
+                                    <img class="rounded-circle" width="220" height="210" src="/Images/dr4.png" alt="Dr. Sarah Jackson">
+                                    <div class="overlay">
+                                        <div class="overlay-text">
+                                            <h5 class="card-title">Dr. Sarah Jackson</h5>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <!-- START THE FEATURETTES -->
+            <br />
+            <div class="card mt-7">
+                <div class="card-body">
+                    <div class="col-md">
+
+                        <div class="row featurette">
+                            <div class="col-md-7">
+                                <h1 class="featurette-heading fw-normal lh-1">Materiale de înaltă calitate. <span class="text-body-secondary"></span></h1>
+                                <p class="lead">Nu facem compromisuri în ceea ce privește estetica, funcționalitatea și versatilitatea materialelor folosite. Lucrăm cu producători de top în piața implanturilor dentare, precum și cu dispozitive medicale ale unor companii lider în domeniul soluțiilor de implant dentar și regenerare de țesuturi, inovării și cercetării.</p>
+                                <p class="lead">Aceste echipamente de înaltă performanță și abordarea noastră orientată către tehnologie și inovație reprezintă angajamentul nostru de a asigura calitatea și excelenta în fiecare aspect al serviciilor noastre stomatologice.</p>
+                            </div>
+                            <div class="col-md-5">
+                                <img class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" src="/Images/poza2.jpeg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-bg)" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="card mt-7">
+                <div class="card-body">
+                    <div class="col-md">
+                        <div class="row featurette">
+                            <div class="col-md-7 order-md-2">
+                                <h2 class="featurette-heading fw-normal lh-1">Cercetare și educație continuă. <span class="text-body-secondary">Servicii de 5 stele.</span></h2>
+                                <p class="lead">Oferim pacienților noștri atenția personalizată pe care o merită, într-­un mediu relaxant și degajat și suntem alături de aceștia în fiecare pas al planului de tratament.</p>
+                                <p class="lead">Suntem dedicați cercetării și educației continue pentru a ne menține la înălțimea standardelor medicale și pentru a ne asigura că oferim cele mai avansate și eficiente metode de tratament stomatologic.</p>
+                                <br />
+                            </div>
+                            <div class="col-md-5 order-md-1">
+                                <img class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" src="/Images/poza3.png" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-bg)" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="card mt-7">
+                <div class="card-body">
+                    <div class="col-md">
+                        <div class="row featurette">
+                            <div class="col-md-7">
+                                <h2 class="featurette-heading fw-normal lh-1">Tehnologie de top. <span class="text-body-secondary">De ce să ne alegi?</span></h2>
+                                <p class="lead">Am ales echipamente de înaltă performanță furnizate de companii recunoscute global în producția de unit­uri dentale digitale și nu numai.</p>
+                                <p class="lead">Continuăm să investim în tehnologie de top pentru a oferi pacienților noștri cele mai avansate și precise tratamente stomatologice disponibile. Această alegere ne permite să utilizăm echipamente și instrumente moderne, care ne ajută să obținem rezultate superioare și să asigurăm confortul și siguranța pacienților noștri.</p>
+                            </div>
+                            <div class="col-md-5">
+                                <img class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" src="/Images/poza1.jpg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-bg)" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <!--Contact Us!-->
+            <div class="card mt-7">
+                <div class="card-body">
+                    <div class="col-md-6">
+                        <h2 class="card-title">Contactează-ne!</h2>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <i class="bi bi-geo-alt-fill text-primary"> : </i> Strada General Mociulschi Nr. 10, 500146, Brașov, România
+                            </li>
+                            <li class="list-group-item">
+                                <i class="bi bi-phone-fill text-primary"> : </i> (+40) 773 990 047
+                            </li>
+                            <li class="list-group-item">
+                                <i class="bi bi-envelope-fill text-primary"> : </i> eduard.kartman10@gmail.com
+                            </li>
+                            <li class="list-group-item">
+                                <i class="bi bi-clock-fill text-primary"> : </i> Program
+                                <ul>
+                                    <li>Luni :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:00 - 18:30</li>
+                                    <li>Marți :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:00 - 18:30</li>
+                                    <li>Miercuri :&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;09:00 - 18:30 </li>
+                                    <li>Joi :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:00 - 18:30</li>
+                                    <li>Vineri :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:00 - 18:30</li>
+                                    <li>Sâmbătă :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Închis</li>
+                                    <li>Duminică :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Închis</li>
+
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="map-container" style="max-width: 610px; height: 380px;">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d5576.449923973499!2d25.605971000000007!3d45.66638400000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sro!4v1686054337224!5m2!1sen!2sro" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
         <br />

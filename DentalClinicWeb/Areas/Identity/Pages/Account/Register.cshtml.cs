@@ -191,26 +191,6 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
                     // created user in Users
                     var userViewModel = CreateUserViewModel(user);
                     _context.Users.Add(userViewModel);
-
-
-                    // Add user to patient or doctor table
-                    /*if (Input.Role == "Doctor")
-                    {
-                        var doctor = new DoctorViewModel
-                        {
-                            Id = user.Id,
-                            Email = user.Email,
-                            FirstName = user.FirstName,
-                            LastName = user.LastName,
-                            PhoneNumber = user.PhoneNumber,
-                            City = user.City,
-                            Country = user.Country,
-                            ZipCode = user.ZipCode,
-
-                        };
-                        _context.Doctors.Add(doctor);
-                    }
-                    */
                         var patient = new PatientViewModel
                         {
                             Id = user.Id,

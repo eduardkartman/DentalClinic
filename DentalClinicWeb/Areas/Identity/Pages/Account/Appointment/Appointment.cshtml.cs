@@ -191,7 +191,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                             var sms = new SMS
                             {
                                 PhoneNumber = $"+4{appointment.PatientPhoneNumber}",
-                                Message = $"Vă mulțumim că ne-ați ales! Programarea dvs. a fost creată cu succes! Programare: {appointment.AppointmentDateTime} - {appointment.EndAppointmentDateTime}",
+                                Message = $"Va mulțumim că ne-ați ales! Programarea dvs. a fost creată cu succes! Programare: {appointment.AppointmentDateTime} - {appointment.EndAppointmentDateTime}",
                                 IsSent = false,
                                 CreatedAt = DateTime.Now,
                             };

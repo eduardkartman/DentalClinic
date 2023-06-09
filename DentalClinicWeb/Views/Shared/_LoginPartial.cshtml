@@ -16,6 +16,19 @@
         z-index: 9999;
     }
 
+    .nav-link:active {
+        /* Add your desired style changes here */
+        transform: scale(0.80); /* Example: reduce the size of the button */
+        /* You can also add other visual effects like changing background color, box-shadow, etc. */
+    }
+    .bigger-icon{
+        font-size: 22px; /* Adjust the font size as per your preference */
+    }
+
+    .bigger-text {
+        font-size: 19px; /* Adjust the font size as per your preference */
+    }
+
 </style>
 
 @{
@@ -28,7 +41,7 @@
         <br />
         <li>
             <div class="dropdown">
-                <a class="nav-link text-white dropdown-toggle" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link text-white dropdown-toggle bigger-icon" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     @{
                         var notificationCount = Context.Notifications.Count(n => n.ReceiverId == user.Id);
                         var numberNewNotifications = Context.Notifications.Count(n => n.ReceiverId == user.Id && !n.IsRead);
@@ -37,7 +50,7 @@
                     <i class="bi bi-bell-fill"></i>
                     @if (numberNewNotifications > 0)
                     {
-                        <span class="badge bg-danger">@numberNewNotifications</span>
+                        <span class="badge bg-danger bigger-icon">@numberNewNotifications</span>
                     }
                 </a>
                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
@@ -60,10 +73,9 @@
                                 {
                                     <a class="dropdown-item">
                                     <div class="d-flex align-items-start">
-                                        <div class="flex-shrink-0"><i class="bi bi-bell-fill text-danger"></i></div>
+                                            <div class="flex-shrink-0"><i class="bi bi-bell-fill bigger-icon"></i></div>
                                         <div class="ml-3">
                                             <h6 class="mb-1">@notification.Message</h6>
-
                                             <small>@notification.CreatedAt.ToShortDateString() @notification.CreatedAt.ToShortTimeString()</small>
                                         </div>
                                     </div>
@@ -74,7 +86,7 @@
                 }
                             @if (newNotifications.Count > 5)
                             {
-                                <a class="dropdown-item" href="/Notifications/Index">Vezi toate notificările</a>
+                                <a class="dropdown-item " href="/Notifications/Index">Vezi toate notificările</a>
                             }
                         }
                         if (numberPastNotifications > 0)
@@ -86,7 +98,7 @@
                         {
                             <a class="dropdown-item">
                                 <div class="d-flex align-items-start">
-                                    <div class="flex-shrink-0"><i class="bi bi-bell-fill"></i></div>
+                                    <div class="flex-shrink-0 bigger-icon"><i class="bi bi-bell-fill bigger-icon"></i></div>
                                     <div class="ml-3">
                                         <h6 class="mb-1">@notification.Message</h6>
                                         <small>@notification.CreatedAt.ToShortDateString() @notification.CreatedAt.ToShortTimeString()</small>
@@ -101,7 +113,7 @@
                         @if(numberNewNotifications == 0 && numberPastNotifications == 0)
                         {
                             <a class="dropdown-item">
-                                <h6 class="mb-1">Nu exista nicio notificare.</h6>
+                                <h6 class="mb-1 ">Nu exista nicio notificare.</h6>
                             </a>
                         }
                     }
@@ -123,22 +135,51 @@
         </li>
         <br />
         <li class="nav-item">
-            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="bi bi-person-fill"></i></a>
+            <a class="nav-link text-white " asp-area="Identity" asp-page="" title=""><i class=""></i></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white " asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="bi bi-person-fill bigger-icon"></i></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white " asp-area="Identity" asp-page="" title=""><i class=""></i></a>
         </li>
         <br />
         <li class="nav-item">
             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button type="submit" class="nav-link btn btn-link text-white"><i class="bi bi-box-arrow-right"></i></button>
+                <button type="submit" class="nav-link btn btn-link text-white"><i class="bi bi-box-arrow-right bigger-icon"></i></button>
             </form>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white " asp-area="Identity" asp-page="" title=""><i class=""></i></a>
         </li>
     }
     else
     {
+        <!--Empty-->
         <li class="nav-item">
-            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Login"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+            <a class="nav-link text-white" asp-area="" asp-page=""><i class="bigger-text"></i> </a>
         </li>
+
+        <li class="nav-item bigger-text">
+            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Login"><i class="bigger-text"></i> Login</a>
+        </li>
+
+        <!--Empty-->
         <li class="nav-item">
-            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Register">Creare Cont</a>
+            <a class="nav-link text-white" asp-area="" asp-page=""><i class="bigger-text"></i> </a>
         </li>
+        <!--Empty-->
+        <li class="nav-item">
+            <a class="nav-link text-white" asp-area="" asp-page=""><i class="bigger-text"></i> </a>
+        </li>
+
+        <li class="nav-item bigger-text">
+            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Register"><i class="bigger-text"></i>Creare Cont</a>
+        </li>
+         <!--Empty-->
+        <li class="nav-item">
+            <a class="nav-link text-white" asp-area="" asp-page=""><i class="bigger-text"></i> </a>
+        </li>
+
     }
 </ul>

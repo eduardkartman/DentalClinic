@@ -68,12 +68,10 @@
     }
 
 
-        .selectDoctorButton.selected,
-        .selectTreatmentButton.selected {
-            background-color: #28a745;
-        }
-
-    /* New styles */
+    .selectDoctorButton.selected,
+    .selectTreatmentButton.selected {
+        background-color: #28a745;
+    }
 
     /* Style for the main content */
     main {
@@ -138,7 +136,60 @@
     #error-box {
         padding-right: 15px; /* Adjust as per your needs */
     }
+
+    .team-member {
+        position: relative;
+        overflow: hidden;
+    }
+
+        .team-member img {
+            transition: transform 0.3s;
+        }
+
+        .team-member:hover img {
+            transform: scale(1.1);
+        }
+
+        .team-member .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .team-member:hover .overlay {
+            opacity: 1;
+        }
+
+        .team-member .overlay-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            text-align: center;
+        }
+
+        .selected{
+        border: 2px solid #34a8eb;
+        }
+
+    .doctor-container {
+        position: relative;
+    }
+
+    .doctor-info {
+        position: relative;
+    }
+
+
+
 </style>
+
 
 <div class="container-fluid" id="error-box">
     <div class="row">
@@ -183,36 +234,34 @@
             </div>
             <form method="post">
                 <!-- Doctors table -->
-                <!-- Hidden input field to store selected doctor's ID -->
-                <div class="form-group">
-                    <h3>Selectează Doctorul Dorit:</h3>
-                    <table id="doctors-table" class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Nume</th>
-                                <th>Email</th>
-                                <th>Mobil</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var doctor in Model.Doctors)
-                            {
-                                <tr>
-                                    <td>@doctor.FirstName @doctor.LastName</td>
-                                    <td>@doctor.Email</td>
-                                    <td>@doctor.PhoneNumber</td>
-                                    <td>
-                                        <button type="button" class="selectDoctorButton" data-doctor-id="@doctor.Id" style="background-color: #007bff">Selectează</button>
-                                        <input asp-for="Appointment.DoctorId" type="hidden" id="doctorId" />
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                <div class="row justify-content-center">
+                    @foreach (var doctor in Model.Doctors)
+                    {
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="team-member">
+                                <div class="doctor-container">
+                                    <div class="doctor-info">
+                                        <img class="rounded-circle doctor-image" width="180" height="170" src="@doctor.ImageUrl" alt="Dr. @doctor.FirstName @doctor.LastName">
+                                        <div class="overlay">
+                                            <div class="overlay-text">
+                                                <h5 class="card-title">Dr. @doctor.FirstName @doctor.LastName</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" style="background-color: #34a8eb;" class="selectDoctorButton btn btn-primary" data-doctor-id="@doctor.Id">Selectează</button>
+                            </div>
+                        </div>
+                    }
                 </div>
-                <br/>
-                <br/>
+
+
+                <div class="form-group">
+                    <input asp-for="Appointment.DoctorId" type="hidden" id="doctorId" />
+                </div>
+                <br />
+                <br />
+
                 <!-- Treatments table -->
                 <div class="form-group">
                     <h3>Selectează Tratamentul Dorit:</h3>
@@ -227,19 +276,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var treatment in Model.Treatments)
-                            {
+                                @foreach (var treatment in Model.Treatments)
+                                {
                                 <tr>
                                     <td>@treatment.Name</td>
                                     <td>@treatment.Price</td>
                                     <td>@treatment.Description</td>
                                     <td>@treatment.DurationInMinutes</td>
                                     <td>
-                                        <button type="button" class="selectTreatmentButton" data-treatment-id="@treatment.Id"style="background-color: #007bff">Selectează</button>
+                                        <button type="button" style="background-color: #34a8eb;" class="selectTreatmentButton" data-treatment-id="@treatment.Id">Selectează</button>
                                         <input asp-for="Appointment.TreatmentId" type="hidden" id="treatmentId" />
                                     </td>
                                 </tr>
-                            }
+                                }
                         </tbody>
                     </table>
                 </div>
@@ -255,49 +304,79 @@
                     </div>
                 </div>
                 <br />
-                <button id="submitBtn" type="submit" class="btn btn-primary" style="background-color: #007bff">Efectuează</button>
+                <button id="submitBtn" type="submit" class="btn btn-primary" style="background-color: #34a8eb">Efectuează</button>
             </form>
         </main>
     </div>
 </div>
 
-@section Scripts {
+    @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
 
     <!-- JavaScript code -->
     <script>
-        var selectedTreatmentId = null; // Store selected treatment ID
-        var selectedDoctorId = null; // Store selected doctor ID
-
         $(document).ready(function () {
-            // Capture selected doctor's ID
-            $(".selectDoctorButton").click(function () {
-                var doctorId = $(this).data("doctor-id");
-                $("#doctorId").val(doctorId);
-                selectedDoctorId = doctorId;
-                $("tr").removeClass("selectedRow"); // Remove selection from all rows
-                $(this).closest("tr").addClass("selectedRow"); // Add selection to clicked row
+            // JavaScript code
+            const selectDoctorButtons = document.querySelectorAll('.selectDoctorButton');
+            const selectTreatmentButtons = document.querySelectorAll('.selectTreatmentButton');
+
+            let selectedDoctor = null;
+            let selectedTreatment = null;
+
+            // Add event listener for selectDoctorButtons
+            selectDoctorButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const doctorId = button.dataset.doctorId;
+                    const doctorContainer = button.parentNode;
+
+                    if (selectedDoctor !== doctorId) {
+                        // Deselect previous doctor
+                        if (selectedDoctor) {
+                            const previousDoctorContainer = document.querySelector(`[data-doctor-id="${selectedDoctor}"]`).parentNode;
+                            previousDoctorContainer.classList.remove('selected');
+                        }
+
+                        // Select new doctor
+                        doctorContainer.classList.add('selected');
+                        selectedDoctor = doctorId;
+                        document.getElementById('doctorId').value = doctorId;
+                    } else {
+                        // Deselect current doctor
+                        doctorContainer.classList.remove('selected');
+                        selectedDoctor = null;
+                        document.getElementById('doctorId').value = '';
+                    }
+                });
             });
 
-            // Capture unselect doctor event
-            $(".unselectDoctorButton").click(function () {
-                selectedDoctorId = null;
-                $(this).closest("tr").removeClass("selectedRow"); // Remove selection from clicked row
+            // Add event listener for selectTreatmentButtons
+            selectTreatmentButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const treatmentId = button.dataset.treatmentId;
+                    const tableRow = button.parentNode.parentNode;
+
+                    if (selectedTreatment !== treatmentId) {
+                        // Deselect previous treatment
+                        if (selectedTreatment) {
+                            const previousTableRow = document.querySelector(`[data-treatment-id="${selectedTreatment}"]`).parentNode.parentNode;
+                            previousTableRow.classList.remove('selected');
+                        }
+
+                        // Select new treatment
+                        tableRow.classList.add('selected');
+                        selectedTreatment = treatmentId;
+                        document.getElementById('treatmentId').value = treatmentId;
+                    } else {
+                        // Deselect current treatment
+                        tableRow.classList.remove('selected');
+                        selectedTreatment = null;
+                        document.getElementById('treatmentId').value = '';
+                    }
+                });
             });
 
-            // Capture selected treatment's ID
-            $(".selectTreatmentButton").click(function () {
-                var treatmentId = $(this).data("treatment-id");
-                $("#treatmentId").val(treatmentId);
-                selectedTreatmentId = treatmentId;
-                $("tr").removeClass("selectedRow"); // Remove selection from all rows
-
-                // Add selection to clicked row and corresponding doctor row
-                $(this).closest("tr").addClass("selectedRow");
-                $(".selectDoctorButton[data-doctor-id='" + selectedDoctorId + "']").closest("tr").addClass("selectedRow");
-            });
 
             // Add click event handler for the submit button
             $('#submitBtn').on('click', function () {
@@ -318,12 +397,18 @@
                     alert('Te rugăm să selectezi o dată și o oră.');
                     return false;
                 }
+
+                // Clear the selectedDoctorId and selectedTreatmentId variables
+                selectedDoctorId = null;
+                selectedTreatmentId = null;
+
+                // Remove selection from all buttons and images
+                $(".selectDoctorButton, .doctor-image").removeClass("selectedItem");
+                $("tr").removeClass("selectedRow");
             });
         });
+
     </script>
-
-
-
 
 
     <script>

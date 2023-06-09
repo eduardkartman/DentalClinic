@@ -43,6 +43,11 @@
     .nav-link {
         color: #fff;
     }
+
+    .bigger-text {
+        font-size: 21px; /* Adjust the font size as per your preference */
+    }
+
 </style>
 
 <head>
@@ -67,7 +72,7 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light" style="background-color: #34a8eb;">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" style="color: white;">
-                    <img src="/Images/logo.png" alt="Logo" style="width: 50px;">
+                    <img src="~/images/logo.png" alt="Logo" style="width: 200px; height: 54px">
                 </a>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -77,30 +82,45 @@
                 <div class="navbar-collapse collapse px-10 d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Acasă</a>
+                            <a class="nav-link text-white bigger-text" asp-area="" asp-controller="Home" asp-action="Index">Acasă</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-white bigger-text" asp-area="" asp-controller="" asp-action=""> </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white bigger-text" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white bigger-text" asp-area="" asp-controller="" asp-action=""> </a>
                         </li>
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="PatientView">Cont</a>
+                                <a class="nav-link text-white bigger-text" asp-area="" asp-controller="Home" asp-action="PatientView">Cont</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/ManageUsers">Utilizatori</a>
+                                <a class="nav-link text-white bigger-text" asp-area="" asp-controller="" asp-action=""> </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white bigger-text" asp-area="Identity" asp-page="/Account/ManageUsers">Utilizatori</a>
                             </li>
                         }
                         else if (User.IsInRole("Patient"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="PatientView">Cont</a>
+                                <a class="nav-link text-white bigger-text" asp-area="" asp-controller="Home" asp-action="PatientView">Cont</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white bigger-text" asp-area="" asp-controller="" asp-action=""> </a>
                             </li>
                         }
                         else if (User.IsInRole("Doctor"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="DoctorView">Cont</a>
+                                <a class="nav-link text-white bigger-text" asp-area="" asp-controller="Home" asp-action="DoctorView">Cont</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white bigger-text" asp-area="" asp-controller="" asp-action=""> </a>
                             </li>
                         }
                     </ul>

@@ -13,6 +13,7 @@ namespace DentalClinicWeb.Models
         public string? City { get; set; }
         public string? ZipCode { get; set; }
         public int? UnreadNotifications { get; set; }
+        public string? ImageUrl { get; set; }
 
     }
 }
