@@ -186,8 +186,23 @@
         position: relative;
     }
 
+    /* Add custom styles for the scrollbar */
+    ::-webkit-scrollbar {
+        width: 10px; /* Adjust the width of the scrollbar */
+    }
 
+    ::-webkit-scrollbar-track {
+        background-color: #f1f1f1; /* Set the background color of the scrollbar track */
+    }
 
+    ::-webkit-scrollbar-thumb {
+        background-color: #888; /* Set the color of the scrollbar thumb */
+        border-radius: 5px; /* Round the edges of the scrollbar thumb */
+    }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #555; /* Set the color of the scrollbar thumb on hover */
+        }
 </style>
 
 
@@ -262,8 +277,9 @@
                 <br />
                 <br />
 
+
                 <!-- Treatments table -->
-                <div class="form-group">
+                <div class="form-group" style="overflow-y: scroll; max-height: 500px;">
                     <h3>Selectează Tratamentul Dorit:</h3>
                     <table id="treatments-table" class="table table-striped">
                         <thead>

@@ -118,16 +118,6 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
 
             [Display(Name = "Phone Number")]
             public string PhoneNumber { get; set; }
-
-            [Display(Name = "Country")]
-            public string Country { get; set; }
-
-            [Display(Name = "City")]
-            public string City { get; set; }
-
-
-            [Display(Name = "ZIP Code")]
-            public string ZipCode { get; set; }
             [BindProperty]
             public string Role { get; set; }
 
@@ -155,9 +145,9 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 PhoneNumber = user.PhoneNumber,
-                City = user.City,
-                Country = user.Country,
-                ZipCode = user.ZipCode,
+                City = string.Empty,
+                Country = string.Empty,
+                ZipCode = string.Empty,
                 Role = user.Role
             };
         }
@@ -167,6 +157,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            Input.Role = "Doctor";
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
@@ -174,11 +165,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
                 user.PhoneNumber = Input.PhoneNumber;
-                user.City = Input.City;
-                user.Country = Input.Country;
-                user.ZipCode = Input.ZipCode;
                 user.Role = "Doctor";
-
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -191,38 +178,21 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
                     // created user in Users
                     var userViewModel = CreateUserViewModel(user);
                     _context.Users.Add(userViewModel);
-
-                    if (Input.Role == "Doctor")
+                    var doctor = new DoctorViewModel
                     {
-                        var doctor = new DoctorViewModel
-                        {
-                            Id = user.Id,
-                            Email = user.Email,
-                            FirstName = user.FirstName,
-                            LastName = user.LastName,
-                            PhoneNumber = user.PhoneNumber,
-                            City = user.City,
-                            Country = user.Country,
-                            ZipCode = user.ZipCode,
+                        Id = user.Id,
+                        Email = user.Email,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        PhoneNumber = user.PhoneNumber,
+                        City = string.Empty,
+                        Country = string.Empty,
+                        ZipCode = string.Empty,
 
-                        };
-                        _context.Doctors.Add(doctor);
-                    }
+                    };
+                    _context.Doctors.Add(doctor);
                     // Save changes to database
                     await _context.SaveChangesAsync();
-
-                    var sms = new SMS
-                    {
-                        PhoneNumber = $"+4{user.PhoneNumber}",
-                        Message = "Vă mulțumim că ne-ați ales! Contul dvs. a fost creat cu succes!",
-                        IsSent = false,
-                        CreatedAt = DateTime.Now,
-                    };
-                    // Add the sms to the database
-                    await _context.SMS.AddAsync(sms);
-                    await _context.SaveChangesAsync();
-
-                    //   SendSMS.sendSMS(sms.PhoneNumber, sms.Message                    
                 }
                 foreach (var error in result.Errors)
                 {

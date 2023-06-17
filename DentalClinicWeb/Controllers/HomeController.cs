@@ -95,7 +95,8 @@ namespace DentalClinicWeb.Controllers
                            .Include(a => a.Treatment)
                            .Include(a => a.Patients)
                            .OrderBy(a => a.AppointmentDateTime)
-                           .Where(a => a.DoctorId == doctorId && a.AppointmentDateTime.Date == DateTime.Now.Date && a.Status != AppointmentStatus.Cancelled)
+                           .Where(a => a.DoctorId == doctorId && a.AppointmentDateTime.Date == 
+                           DateTime.Now.Date && a.Status != AppointmentStatus.Cancelled)
                            .Select(a => new AppointmentViewModel
                            {
                                Id = a.Id,

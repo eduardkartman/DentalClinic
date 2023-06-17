@@ -9,12 +9,12 @@ namespace DentalClinicWeb.Models
     public class AppointmentViewModel
     {
         public int Id { get; set; }
-
+        
         public string PatientId { get; set; }
         public string PatientName { get; set; }
         public string PatientEmail { get; set; }
         public string PatientPhoneNumber { get; set;}
-
+        
         [ForeignKey("PatientId")]
         public PatientViewModel Patients { get; set; }
         public string DoctorId { get; set; }

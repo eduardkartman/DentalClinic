@@ -88,29 +88,17 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
 
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "{0} trebuie să fie între {2} și maxim {1} caractere.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
@@ -169,8 +157,8 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                // se vor stoca datele folosind metoda de creare de user.
                 var user = CreateUser();
-
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
                 user.PhoneNumber = Input.PhoneNumber;
@@ -178,48 +166,47 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
                 user.Country = Input.Country;
                 user.ZipCode = Input.ZipCode;
                 user.Role = "Patient";
-
-
+                //se stocheaza adresa de email
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                //se creaza contul in interiorul framework-ului si se asociaza parola
                 var result = await _userManager.CreateAsync(user, Input.Password);
-
                 if (result.Succeeded)
                 {
-                    // added roles to AspNetUsers
+                    // se adauga utilizatorul la tabela creata de framework
                     await _userManager.AddToRoleAsync(user, "Patient");
-                    // created user in Users
+                    // se adauga utilizatorul la tabela creata ulterior cu utilizatori
                     var userViewModel = CreateUserViewModel(user);
                     _context.Users.Add(userViewModel);
                         var patient = new PatientViewModel
                         {
-                            Id = user.Id,
-                            Email = user.Email,
-                            FirstName = user.FirstName,
-                            LastName = user.LastName,
-                            PhoneNumber = user.PhoneNumber,
-                            City = user.City,
-                            Country = user.Country,
-                            ZipCode = user.ZipCode,
+                            Id = user.Id, Email = user.Email,
+                            FirstName = user.FirstName, LastName = user.LastName,
+                            PhoneNumber = user.PhoneNumber, City = user.City,
+                            Country = user.Country, ZipCode = user.ZipCode,
 
                         };
                         _context.Patients.Add(patient);
-
-                    // Save changes to database
+                    // se salveaza schimbarile facute in baza de date
                     await _context.SaveChangesAsync();
-
+                    // se stocheaza proprietatile pentru trimiterea SMS-ului
                     var sms = new SMS
                     {
                         PhoneNumber = $"+4{user.PhoneNumber}",
-                        Message = "Vă mulțumim că ne-ați ales! Contul dvs. a fost creat cu succes!",
+                        Message = "Va multumim pentru ca ne-ati ales! Contul dvs. a fost creat cu succes!",
                         IsSent = false,
                         CreatedAt = DateTime.Now,
                     };
-                    // Add the sms to the database
+                    // se tine evidenta si se stocheaza SMS-ul in baza de date
                     await _context.SMS.AddAsync(sms);
                     await _context.SaveChangesAsync();
+                    //se apeleaza metoda pentru trimiterea SMS-ului
+                    SendSMS.sendSMS(sms.PhoneNumber, sms.Message);
 
-                 //   SendSMS.sendSMS(sms.PhoneNumber, sms.Message);
+
+
+
+
 
                     _logger.LogInformation("User created a new account with password.");
 

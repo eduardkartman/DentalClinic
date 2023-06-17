@@ -62,7 +62,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                 var notification = new NotificationModel
                 {
                     AppointmentId = appointmentId,
-                    Message = $"Programarea dvs. a fost acceptată! {appointment.TreatmentName} - {appointment.AppointmentDateTime}",
+                    Message = $"Programarea dvs. a fost acceptata! Data programarii: {appointment.TreatmentName} - {appointment.AppointmentDateTime}",
                     ReceiverId = appointment.PatientId,
                     SenderId = appointment.DoctorId,
                     CreatedAt = DateTime.Now
@@ -79,7 +79,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                 var sms = new SMS
                 {
                     PhoneNumber = $"+4{appointment.PatientPhoneNumber}",
-                    Message = $"Ne bucurăm să vă anunțăm că programarea dvs. a fost acceptată de către medicul nostru. Data programării: {appointment.AppointmentDateTime} - {appointment.EndAppointmentDateTime}",
+                    Message = $"Ne bucuram sa va anuntam ca programarea dvs. a fost acceptata de catre medicul {appointment.DoctorName}. Data programarii: {appointment.AppointmentDateTime} - {appointment.EndAppointmentDateTime}",
                     IsSent = false,
                     CreatedAt = DateTime.Now,
                 };
@@ -119,7 +119,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                 var sms = new SMS
                 {
                     PhoneNumber = $"+4{appointment.PatientPhoneNumber}",
-                    Message = "Din păcate, programarea dumneavoastră, a fost anulată de medicul nostru.Vă recomandăm să vă reprogramați.",
+                    Message = "Din pacate, programarea dumneavoastra, a fost anulata de medicul nostru. Va recomandam sa va reprogramati.",
                     IsSent = false,
                     CreatedAt = DateTime.Now,
                 };
@@ -128,7 +128,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
 
                 await _context.SaveChangesAsync();
                 
-                SendSMS.sendSMS(sms.PhoneNumber, sms.Message);
+                //SendSMS.sendSMS(sms.PhoneNumber, sms.Message);
                 return RedirectToPage();
             }
 
