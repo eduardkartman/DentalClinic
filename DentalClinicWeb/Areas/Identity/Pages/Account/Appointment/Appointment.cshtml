@@ -213,7 +213,10 @@
             <div class="sidebar-sticky">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="PatientView">Panou Principal</a>
+                        <a class="nav-link active" href="@Url.Action("PatientView", "Home")">
+                            <span data-feather="home"></span>
+                            Panou Principal <span class="sr-only"></span>
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/Appointment">Programări</a>
@@ -224,21 +227,16 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <span data-feather="users"></span>
-                            Pacienti
+                            Arhiva Programărilor
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <span data-feather="bar-chart-2"></span>
-                            Rapoarte
+                            Repoarte
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="layers"></span>
-                            Integrations
-                        </a>
-                    </li>
+
                 </ul>
             </div>
         </nav>

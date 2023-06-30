@@ -46,7 +46,7 @@
                         var notificationCount = Context.Notifications.Count(n => n.ReceiverId == user.Id);
                         var numberNewNotifications = Context.Notifications.Count(n => n.ReceiverId == user.Id && !n.IsRead);
                         var numberPastNotifications = Context.Notifications.Count(n => n.ReceiverId == user.Id && n.IsRead);
-                    }
+                    }        
                     <i class="bi bi-bell-fill"></i>
                     @if (numberNewNotifications > 0)
                     {
@@ -75,16 +75,16 @@
                                     </div>
                                     </a>                                
 
-                }
+                             }
                             @if (newNotifications.Count > 5)
                             {
                                 <a class="dropdown-item " href="/Notifications/Index">Vezi toate notificările</a>
                             }
                         }
-                        if (numberPastNotifications > 0)
+                        @if (numberPastNotifications > 0)
                         {
                             <div class="dropdown-divider"></div>
-                            <h6 class="dropdown-header">Nitificări din Trecut (@numberPastNotifications)</h6>
+                            <h6 class="dropdown-header">Notificări din Trecut (@numberPastNotifications)</h6>
                         }
                         @foreach (var notification in pastNotifications.Take(5))
                         {

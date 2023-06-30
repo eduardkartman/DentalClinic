@@ -126,7 +126,6 @@
         <nav class="col-md-2 d-none d-md-block bg-light sidebar">
             <div class="sidebar-sticky">
                 <ul class="nav flex-column">
-
                     @if (User.IsInRole("Patient") || User.IsInRole("Admin"))
                     {
                         <li class="nav-item">
@@ -149,34 +148,19 @@
                             <a class="nav-link" asp-area="Identity" asp-page="/Account/Appointment/HistoryAppointment">Programări</a>
                         </li>
                     }
-
                     <li class="nav-item">
                         <a class="nav-link" asp-area="Identity" asp-page="/Account/Treatments/Visit">Tratamente</a>
                     </li>
-
-                    @if (User.IsInRole("Doctor"))
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Users/Patients">Repoarte</a>
-                        </li>
-                    }
-
                     <li class="nav-item">
                         <a class="nav-link" href="#">
-                            <span data-feather="layers"></span>
-                            Integrations
+                            <span data-feather="users"></span>
+                            Arhiva Programărilor
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
-                            <span data-feather="layers"></span>
-                            Integrations
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="layers"></span>
-                            Integrations
+                            <span data-feather="bar-chart-2"></span>
+                            Repoarte
                         </a>
                     </li>
                 </ul>

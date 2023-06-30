@@ -33,7 +33,7 @@ namespace DentalClinicWeb.Models
             // verificare daca modemul gsm este conectat la retea
             modemResponse = sPort.ReadExisting();
             sPort.WriteLine("AT+CREG?");
-            System.Threading.Thread.Sleep(2000);
+            System.Threading.Thread.Sleep(5000);
             modemResponse = sPort.ReadExisting();
 
             // raspunsul trebuie sa fie de forma: AT+CREG?\r\r\n+CREG: 0,0\r\n\r\nOK\r\n

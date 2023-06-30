@@ -151,11 +151,11 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                             var appointment = new AppointmentViewModel
                             {
                                 PatientId = patient.Id,
-                                PatientName = patient.FirstName + patient.LastName,
+                                PatientName = patient.FirstName +" "+ patient.LastName,
                                 PatientEmail = patient.Email,
                                 PatientPhoneNumber = patient.PhoneNumber,
                                 DoctorId = doctorId,
-                                DoctorName = doctor.FirstName + doctor.LastName,
+                                DoctorName = doctor.FirstName + " " + doctor.LastName,
                                 DoctorEmail = doctor.Email,
                                 DoctorPhoneNumber = doctor.PhoneNumber,
                                 TreatmentId = treatmentId,
@@ -197,9 +197,9 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                             await _context.SMS.AddAsync(sms);
                             await _context.SaveChangesAsync();
                             // Se apeleaza functia pentru a trimite mesajul stocat într-un SMS.
-                            //SendSMS.sendSMS(sms.PhoneNumber, sms.Message);
+                            SendSMS.sendSMS(sms.PhoneNumber, sms.Message);
 
-                            return Page();
+                            return RedirectToAction("PatientView", "Home");
                         }
                         else if (gapDuration > treatment.DurationInMinutes && gapEnd > endAppointmentDateTime)
                         {
@@ -221,11 +221,11 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                 var appointment = new AppointmentViewModel
                 {
                     PatientId = patient.Id,
-                    PatientName = patient.FirstName + patient.LastName,
+                    PatientName = patient.FirstName + " " + patient.LastName,
                     PatientEmail = patient.Email,
                     PatientPhoneNumber = patient.PhoneNumber,
                     DoctorId = doctorId,
-                    DoctorName = doctor.FirstName + doctor.LastName,
+                    DoctorName = doctor.FirstName + " " + doctor.LastName,
                     DoctorEmail = doctor.Email,
                     DoctorPhoneNumber = doctor.PhoneNumber,
                     TreatmentId = treatmentId,
@@ -269,8 +269,8 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                 await _context.SMS.AddAsync(sms);
                 await _context.SaveChangesAsync();
 
-                //SendSMS.sendSMS(sms.PhoneNumber, sms.Message);
-                return Page();
+                SendSMS.sendSMS(sms.PhoneNumber, sms.Message);
+                return RedirectToAction("PatientView", "Home");
 
             }
             
@@ -280,7 +280,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
 
             Doctors = await _context.Doctors.ToListAsync();
             Treatments = await _context.Treatments.ToListAsync();
-            return Page();
+            return RedirectToAction("PatientView", "Home");
 
         }
     }

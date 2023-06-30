@@ -135,13 +135,6 @@
                     <li class="nav-item">
                         <a class="nav-link" asp-area="Identity" asp-page="/Account/Users/Patients">Rapoarte</a>
                     </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="layers"></span>
-                            Integrations
-                        </a>
-                    </li>
                 </ul>
             </div>
         </nav>
@@ -171,13 +164,21 @@
                             <h5 class="card-title">Lista Pacienților</h5>
                         </div>
                         <div class="card-body">
-                            <!-- Add your patient list content here -->
                             <ul id="patientList">
-                                <li>Nu a fost găsit niciun pacient.</li>
+                                @foreach (var patients in ViewBag.PatientList)
+                                {
+                                    <li>
+                                        <strong>Nume:</strong> @patients.PatientName<br />
+                                        <strong>Email:</strong> @patients.PatientEmail<br />
+                                        <strong>Telefon:</strong> @patients.PatientPhoneNumber
+                                    </li>
+                                    <br />
+                                }
                             </ul>
                         </div>
                     </div>
                 </div>
+
                 <!-- Appointment Summary -->
                 <div class="col-md-6">
                     <div class="rounded-frame p-2 frame">

@@ -79,7 +79,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                 var sms = new SMS
                 {
                     PhoneNumber = $"+4{appointment.PatientPhoneNumber}",
-                    Message = $"Ne bucuram sa va anuntam ca programarea dvs. a fost acceptata de catre medicul {appointment.DoctorName}. Data programarii: {appointment.AppointmentDateTime} - {appointment.EndAppointmentDateTime}",
+                    Message = $"Ne bucuram sa va anuntam ca programarea dvs. a fost acceptata de catre medicul nostru. Data programarii: {appointment.AppointmentDateTime} - {appointment.EndAppointmentDateTime}",
                     IsSent = false,
                     CreatedAt = DateTime.Now,
                 };
@@ -103,7 +103,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
                 var notification = new NotificationModel
                 {
                     AppointmentId = appointmentId,
-                    Message = "Programarea dvs. a fost anulată! Vă recomandăm să vă reprogramați!",
+                    Message = "Programarea dvs. a fost anulata! Va recomandam sa va reprogramati!",
                     ReceiverId = appointment.PatientId,
                     SenderId = appointment.DoctorId,
                     CreatedAt = DateTime.Now
@@ -128,7 +128,7 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account.Appointment
 
                 await _context.SaveChangesAsync();
                 
-                //SendSMS.sendSMS(sms.PhoneNumber, sms.Message);
+                SendSMS.sendSMS(sms.PhoneNumber, sms.Message);
                 return RedirectToPage();
             }
 

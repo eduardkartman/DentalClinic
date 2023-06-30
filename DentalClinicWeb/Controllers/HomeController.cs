@@ -132,6 +132,19 @@ namespace DentalClinicWeb.Controllers
 
             ViewBag.UpcomingAppointments = upcomingAppointments;
 
+            // Retrieve the appointments matching the doctor's ID and status
+            var patientList = await _context.Appointments
+                .Include(a => a.Patients)
+                .Where(a => a.DoctorId == doctorId && a.Status == AppointmentStatus.Accepted)
+                .Select(a => new AppointmentViewModel
+                { 
+                    PatientName = a.PatientName,
+                    PatientEmail = a.PatientEmail,
+                    PatientPhoneNumber = a.PatientPhoneNumber,
+                })
+            .ToListAsync();
+            ViewBag.PatientList = patientList;
+
             return View();
         }
 

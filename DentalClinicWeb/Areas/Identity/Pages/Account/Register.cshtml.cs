@@ -203,11 +203,6 @@ namespace DentalClinicWeb.Areas.Identity.Pages.Account
                     //se apeleaza metoda pentru trimiterea SMS-ului
                     SendSMS.sendSMS(sms.PhoneNumber, sms.Message);
 
-
-
-
-
-
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
